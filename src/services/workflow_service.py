@@ -193,9 +193,9 @@ class WorkflowService:
                 "content_type": workflow.request.content_type,
                 "target_audience": workflow.request.target_audience,
                 "tone": workflow.request.tone,
-                "brand_voice": workflow.request.brand_voice,
+                "brand_voice_guidelines": workflow.request.brand_voice_guidelines,
                 "word_count": workflow.request.word_count,
-                "special_instructions": workflow.request.special_instructions
+                "extra_instructions": workflow.request.extra_instructions
             })
             
             # Set team session ID to workflow ID for traceability
