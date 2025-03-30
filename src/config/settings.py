@@ -6,18 +6,25 @@ type-safe access to configuration values throughout the application.
 """
 
 import os
-from pydantic import BaseSettings, Field, validator
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional, Union, Any
+from pydantic import Field, field_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class LLMSettings(BaseSettings):
     """Settings for LLM API connections."""
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore"
+    )
+    
     OPENAI_API_KEY: str = Field(..., env="OPENAI_API_KEY")
     ANTHROPIC_API_KEY: str = Field(..., env="ANTHROPIC_API_KEY")
     DEEPSEEK_API_KEY: str = Field(..., env="DEEPSEEK_API_KEY")
     GROK_API_KEY: str = Field(..., env="GROK_API_KEY")
     
-    MODEL_CONFIG: Dict[str, Dict[str, Union[str, int, float, Dict]]] = {
+    MODEL_CONFIG: Dict[str, Dict[str, Any]] = {
         "research": {
             "provider": "openai",
             "model": "o3-mini",
@@ -44,7 +51,8 @@ class LLMSettings(BaseSettings):
         }
     }
     
-    @validator("OPENAI_API_KEY", "ANTHROPIC_API_KEY", "DEEPSEEK_API_KEY", "GROK_API_KEY")
+    @field_validator("OPENAI_API_KEY", "ANTHROPIC_API_KEY", "DEEPSEEK_API_KEY", "GROK_API_KEY")
+    @classmethod
     def validate_api_keys(cls, v: str) -> str:
         """Validate that API keys are not empty and have valid format."""
         if not v:
@@ -56,9 +64,15 @@ class LLMSettings(BaseSettings):
 
 class APISettings(BaseSettings):
     """Settings for the FastAPI application."""
-    APP_NAME: str = "SEO Agent API"
-    APP_VERSION: str = "0.1.0"
-    APP_DESCRIPTION: str = "Multi-LLM Agentic Content Creation System"
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore"
+    )
+    
+    APP_NAME: str = Field("SEO Agent API", env="APP_NAME")
+    APP_VERSION: str = Field("0.1.0", env="APP_VERSION")
+    APP_DESCRIPTION: str = Field("Multi-LLM Agentic Content Creation System", env="APP_DESCRIPTION")
     DEBUG: bool = Field(False, env="DEBUG")
     HOST: str = Field("0.0.0.0", env="HOST")
     PORT: int = Field(8000, env="PORT")
@@ -71,7 +85,8 @@ class APISettings(BaseSettings):
     API_KEY_HEADER: str = "X-API-Key"
     API_KEYS: List[str] = Field([], env="API_KEYS")
     
-    @validator("API_KEYS", pre=True)
+    @field_validator("API_KEYS", mode="before")
+    @classmethod
     def validate_api_keys(cls, v: Union[str, List[str]]) -> List[str]:
         """Parse API_KEYS from comma-separated string if needed."""
         if isinstance(v, str):
@@ -81,6 +96,12 @@ class APISettings(BaseSettings):
 
 class DatabaseSettings(BaseSettings):
     """Settings for database connections."""
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore"
+    )
+    
     POSTGRES_USER: str = Field("postgres", env="POSTGRES_USER")
     POSTGRES_PASSWORD: str = Field("postgres", env="POSTGRES_PASSWORD")
     POSTGRES_DB: str = Field("seo_agent", env="POSTGRES_DB")
@@ -95,6 +116,12 @@ class DatabaseSettings(BaseSettings):
 
 class AgentSettings(BaseSettings):
     """Settings for agent execution and workflow."""
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore"
+    )
+    
     MAX_RETRIES: int = Field(3, env="MAX_RETRIES")
     TIMEOUT_SECONDS: int = Field(300, env="TIMEOUT_SECONDS")
     CONCURRENT_WORKFLOWS: int = Field(5, env="CONCURRENT_WORKFLOWS")
@@ -111,6 +138,12 @@ class AgentSettings(BaseSettings):
 
 class NotificationSettings(BaseSettings):
     """Settings for notification services."""
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore"
+    )
+    
     SLACK_WEBHOOK_URL: Optional[str] = Field(None, env="SLACK_WEBHOOK_URL")
     SLACK_CHANNEL: Optional[str] = Field(None, env="SLACK_CHANNEL")
     EMAIL_NOTIFICATIONS: bool = Field(False, env="EMAIL_NOTIFICATIONS")
@@ -124,6 +157,12 @@ class NotificationSettings(BaseSettings):
 
 class AgnoSettings(BaseSettings):
     """Settings for Agno framework configuration."""
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore"
+    )
+    
     # Agno storage settings
     USE_POSTGRES_STORAGE: bool = Field(True, env="USE_POSTGRES_STORAGE")
     PGVECTOR_ENABLED: bool = Field(False, env="PGVECTOR_ENABLED")
@@ -136,22 +175,25 @@ class AgnoSettings(BaseSettings):
     KNOWLEDGE_COLLECTION: str = Field("seo_agent_knowledge", env="KNOWLEDGE_COLLECTION")
 
 
-class Settings(BaseSettings):
-    """Main application settings combining all subsettings."""
-    ENVIRONMENT: str = Field("development", env="ENVIRONMENT")
+# Create global settings instances
+llm_settings = LLMSettings()
+api_settings = APISettings()
+db_settings = DatabaseSettings()
+agent_settings = AgentSettings()
+notification_settings = NotificationSettings()
+agno_settings = AgnoSettings()
+
+# Create a settings container for easy access
+class Settings:
+    """Container for all settings objects."""
+    ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
     
-    llm: LLMSettings = LLMSettings()
-    api: APISettings = APISettings()
-    db: DatabaseSettings = DatabaseSettings()
-    agent: AgentSettings = AgentSettings()
-    notifications: NotificationSettings = NotificationSettings()
-    agno: AgnoSettings = AgnoSettings()
-
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-        case_sensitive = True
-
+    llm = llm_settings
+    api = api_settings
+    db = db_settings
+    agent = agent_settings
+    notifications = notification_settings
+    agno = agno_settings
 
 # Create global settings instance
 settings = Settings()

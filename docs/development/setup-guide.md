@@ -4,10 +4,10 @@ This guide provides detailed instructions for setting up and extending the Multi
 
 ## Project Overview
 
-We've built a scalable, multi-LLM content creation system using Agno as the agent framework and FastAPI for the API layer. The system follows a modular architecture with clear separation of concerns:
+We've built a scalable, multi-LLM content creation system using Agno 1.2.6+ as the agent framework and FastAPI for the API layer. The system follows a modular architecture with clear separation of concerns:
 
 - **Agents**: Specialized LLM agents for research, brief creation, fact acquisition, and content generation
-- **Services**: Middleware connecting agents, LLMs, and the API layer
+- **Services**: Middleware connecting agents and the API layer
 - **Models**: Data structures for requests, responses, and internal representations
 - **API**: RESTful endpoints for interacting with the system
 - **Utils**: Shared utilities for error handling, validation, etc.
@@ -19,120 +19,158 @@ The project has the following components implemented:
 - ✅ Project structure and file organization
 - ✅ Configuration management system
 - ✅ Data models for workflow and content
-- ✅ LLM service for interacting with different models
-- ✅ Research Agent implementation (O3Mini)
+- ✅ Agno framework integration (version 1.2.6+)
+- ✅ Research Agent implementation (OpenAI)
+- ✅ Brief Agent implementation (DeepSeek)
+- ✅ Facts Agent implementation (Grok)
+- ✅ Content Agent implementation (Claude)
 - ✅ Workflow orchestration service
 - ✅ API endpoints for content generation
 - ✅ Error handling and validation utilities
-- ✅ Docker and Railway.app deployment configuration
+- ✅ FastAPI application structure
 
-## Next Implementation Steps
+## Dependencies
 
-To complete the system, implement the remaining agents:
+The application requires the following dependencies:
 
-1. **Brief Agent (DeepSeek)**
-   - Create `src/agents/brief_agent.py` based on the Research Agent pattern
-   - Implement logic to process research results and generate content briefs
-   - Use DeepSeek model for gap analysis and brief creation
+1. **Python 3.11+**
+2. **API Keys** for various LLM providers:
+   - OpenAI API key
+   - Anthropic API key
+   - DeepSeek API key
+   - Grok API key
+3. **Client Libraries**:
+   - `openai` (v1.69.0+)
+   - `anthropic`
+   - `openrouter`
+   - `grok-api`
+4. **Agno Framework** (v1.2.6+)
+5. **FastAPI**
+6. **Pydantic** (v2.0+)
 
-2. **Facts Agent (Grok3)**
-   - Create `src/agents/facts_agent.py` 
-   - Implement logic to collect real-time facts and data
-   - Leverage Grok3's web access capabilities
+## Environment Setup
 
-3. **Content Agent (Claude 3.7)**
-   - Create `src/agents/content_agent.py`
-   - Implement logic to generate high-quality content based on brief and facts
-   - Use Claude 3.7 for final content generation
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/your-org/seo-agent.git
+   cd seo-agent
+   ```
 
-4. **Human-in-the-Loop Integration**
-   - Enhance the Workflow Service with human review capabilities
-   - Add endpoints for submitting and processing feedback
+2. **Create and activate a virtual environment**
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate  # On Windows, use venv\Scripts\activate
+   ```
+
+3. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Create .env file with API keys**
+   ```
+   OPENAI_API_KEY=sk-...
+   ANTHROPIC_API_KEY=sk-...
+   DEEPSEEK_API_KEY=sk-...
+   GROK_API_KEY=sk-...
+   EMAIL_TO='[]'
+   ```
 
 ## Agent Implementation Pattern
 
-Follow this pattern when implementing each agent:
+All agents are already implemented following this pattern:
 
 1. Define the agent class extending Agno's `Agent` base class:
    ```python
-   class BriefAgent(Agent):
-       def __init__(self):
+   from agno.agent import Agent
+   from agno.models.openai import OpenAIChat
+   
+   class ResearchAgent(Agent):
+       def __init__(self, storage=None):
            super().__init__(
-               name="Brief Agent",
-               description="Creates content briefs based on research analysis.",
-               model=llm_service.models["deepseek-large"]
+               name="Research Agent",
+               description="Analyzes existing content for a target keyword.",
+               model=OpenAIChat(id="gpt-4o"),
+               storage=storage,
+               knowledge=get_knowledge_provider()
            )
    ```
 
 2. Implement context validation:
    ```python
-   async def validate_context(self, context: Context) -> bool:
-       # Validate that the context contains required data
-       if not context.get("research_output"):
-           logger.error("Missing research output in context")
+   async def validate_context(self, context: Dict[str, Any]) -> bool:
+       # Validate that the context contains required information
+       if not context.get("keyword"):
+           logger.error("Missing required keyword in context")
            return False
        return True
    ```
 
 3. Implement the main run method:
    ```python
-   async def run(self, context: Context) -> Dict[str, Any]:
+   async def run(self, context: Dict[str, Any] = None) -> Dict[str, Any]:
+       # Use the context passed or the agent's own context
+       context = context or self.context
+       
        # Start timing execution
        start_time = time.time()
        
        # Validate context
        if not await self.validate_context(context):
-           raise ValueError("Invalid context for brief agent")
-           
-       # Core agent logic goes here
-       # ...
+           raise ValueError("Invalid context for research agent")
        
-       # Return structured output
-       return brief_output.dict()
+       # ... Agent logic ...
+       
+       return research_output.dict()
    ```
 
-4. Add helper methods for breaking down complex logic:
-   ```python
-   async def _identify_content_gaps(self, research_output: Dict[str, Any]) -> List[Dict[str, Any]]:
-       # Helper method for specific task
-       # ...
-   ```
+## Running the Application
 
-## Testing Your Implementation
+To run the application:
 
-1. Unit testing individual agents:
+```bash
+python -m src.main
+```
+
+This starts the FastAPI application on http://localhost:8000. You can access:
+- API documentation at http://localhost:8000/docs
+- ReDoc at http://localhost:8000/redoc
+- Health check at http://localhost:8000/api/v1/health
+
+## Testing
+
+1. Unit testing:
    ```bash
-   pytest tests/agents/test_brief_agent.py
+   pytest tests/
    ```
 
-2. Testing the entire workflow:
-   ```bash
-   pytest tests/services/test_workflow_service.py
-   ```
-
-3. Manual testing via API:
+2. Manual testing via API:
    ```bash
    curl -X POST http://localhost:8000/api/v1/workflows \
      -H "Content-Type: application/json" \
      -H "X-API-Key: your-api-key" \
-     -d '{"keyword": "test keyword", "content_type": "blog post"}'
+     -d '{"keyword": "best ergonomic chairs", "content_type": "blog post"}'
    ```
+
+## Troubleshooting
+
+Common issues and solutions:
+
+1. **Import Errors**: Ensure you're using the correct import paths for Agno 1.2.6+:
+   - Use `from agno.models.openai import OpenAIChat` not `from agno.models import OpenAI`
+   - Use `from agno.models.anthropic import Claude` not `from agno.models import Anthropic`
+
+2. **API Key Issues**: Verify all API keys are correctly set in the .env file
+
+3. **Model Initialization**: Models require the `id` parameter, not `model_name`
+
+4. **Storage Errors**: If using PostgreSQL, verify the database connection details
 
 ## Documentation
 
-As you implement new components, update the following documentation:
+For more information, refer to:
 
 - `docs/architecture/`: System design and component relationships
 - `docs/features/`: User-facing feature documentation
-- `docs/systems/`: Internal system documentation
-- `tests/`: Test cases and examples
-
-## Best Practices
-
-- Follow Cursor rules for code style and quality checks
-- Use type hints throughout your code
-- Add comprehensive docstrings
-- Handle errors appropriately
-- Validate inputs and outputs
-- Avoid hardcoding credentials
-- Use async patterns consistently 
+- `docs/systems/`: Internal system documentation (see `agno-integration.md` for details)
+- `docs/development/`: Development guides and practices 

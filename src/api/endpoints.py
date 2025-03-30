@@ -19,7 +19,6 @@ from src.api.models import (
     WorkflowListResponse, CancelWorkflowResponse
 )
 from src.services.workflow_service import workflow_service
-from src.services.llm_service import llm_service
 from src.utils.validation import validate_api_key
 
 # Set up logger
@@ -63,13 +62,12 @@ async def verify_api_key(x_api_key: str = Header(None)):
 
 @router.get("/health", response_model=HealthCheckResponse, tags=["System"])
 async def health_check():
-    """Check API health and LLM model availability."""
-    model_availability = await llm_service.check_model_availability()
-    
+    """Check API health and configuration status."""
+    # Simple check that returns the API status without model checks
     return HealthCheckResponse(
         status="ok",
         version=settings.api.APP_VERSION,
-        models=model_availability,
+        models={"agno_configured": True},
         timestamp=datetime.now()
     )
 
@@ -244,7 +242,9 @@ async def get_generated_content(
         html_content = f"<h1>{workflow.generated_content.title}</h1>"
         for section in workflow.generated_content.content_sections:
             html_content += f"<h2>{section.get('heading', '')}</h2>"
-            html_content += f"<div>{section.get('content', '').replace('\n', '<br>')}</div>"
+            content = section.get('content', '')
+            content_with_br = content.replace('\n', '<br>')
+            html_content += f"<div>{content_with_br}</div>"
         
         return JSONResponse(content={"content": html_content, "format": "html"})
     

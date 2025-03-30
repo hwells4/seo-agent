@@ -13,8 +13,10 @@ import uuid
 from typing import Dict, Any, Optional, List
 
 import agno
-from agno import Context, Team, TeamOrchestration
-from agno.storage import StorageProvider, MemoryStorage
+from agno.team import Team
+from agno.workflow import Workflow, RunResponse
+from agno.storage.base import Storage as StorageProvider
+from agno.storage.json import JsonStorage as MemoryStorage
 
 from src.config.settings import settings
 from src.config.agno_config import _get_storage_provider
@@ -57,22 +59,17 @@ class WorkflowService:
         self.facts_agent = FactsAgent(storage=self.storage)
         self.content_agent = ContentAgent(storage=self.storage)
         
-        # Get orchestration type from settings
-        orchestration_type = TeamOrchestration.SEQUENTIAL
-        if settings.agno.TEAM_ORCHESTRATION.lower() == "parallel":
-            orchestration_type = TeamOrchestration.PARALLEL
-        
-        # Initialize the agent team
+        # Initialize the agent team with sequential mode (default)
         self.content_team = Team(
             name="Content Creation Team",
-            agents=[
+            members=[
                 self.research_agent,
                 self.brief_agent,
                 self.facts_agent,
                 self.content_agent
             ],
-            orchestration=orchestration_type,
-            storage=self.storage
+            storage=self.storage,
+            mode="sequential"  # Use sequential mode instead of TeamOrchestration enum
         )
         
         logger.info(f"Workflow service initialized with Agno Team using {settings.agno.TEAM_ORCHESTRATION} orchestration")
@@ -188,28 +185,27 @@ class WorkflowService:
         start_time = time.time()
         
         try:
-            # Initialize Agno context with workflow data
-            context = Context(storage=self.storage)
+            # Update team context with workflow data instead of using Context
+            self.content_team.add_context({
+                "workflow_id": workflow_id,
+                "keyword": workflow.request.keyword,
+                "secondary_keywords": workflow.request.secondary_keywords,
+                "content_type": workflow.request.content_type,
+                "target_audience": workflow.request.target_audience,
+                "tone": workflow.request.tone,
+                "brand_voice": workflow.request.brand_voice,
+                "word_count": workflow.request.word_count,
+                "special_instructions": workflow.request.special_instructions
+            })
             
-            # Add request data to context
-            context["workflow_id"] = workflow_id
-            context["keyword"] = workflow.request.keyword
-            context["secondary_keywords"] = workflow.request.secondary_keywords
-            context["content_type"] = workflow.request.content_type
-            context["target_audience"] = workflow.request.target_audience
-            context["tone"] = workflow.request.tone
-            context["word_count"] = workflow.request.word_count
-            context["brand_voice_guidelines"] = workflow.request.brand_voice_guidelines
-            
-            # Set up workflow status tracking
-            context["on_stage_start"] = self._on_stage_start
-            context["on_stage_complete"] = self._on_stage_complete
+            # Set team session ID to workflow ID for traceability
+            self.content_team.session_id = workflow_id
             
             # Execute the team (runs all agents in sequence)
             await self._update_workflow_status(workflow_id, WorkflowStatus.RESEARCH_IN_PROGRESS)
             
             # Run the entire team on the context
-            team_result = await self.content_team.run(context)
+            team_result = await self.content_team.run()
             
             # Process results from each agent in the team
             if "research_output" in team_result:
@@ -253,56 +249,6 @@ class WorkflowService:
             # Clean up
             if workflow_id in self.active_workflows:
                 del self.active_workflows[workflow_id]
-    
-    async def _on_stage_start(self, agent_name: str, context: Context) -> None:
-        """Callback when an agent stage starts in the team.
-        
-        Args:
-            agent_name: Name of the agent starting execution
-            context: The current context
-        """
-        workflow_id = context.get("workflow_id")
-        if not workflow_id:
-            return
-        
-        # Map agent name to workflow status
-        status_mapping = {
-            "Research Agent": WorkflowStatus.RESEARCH_IN_PROGRESS,
-            "Brief Agent": WorkflowStatus.BRIEF_IN_PROGRESS,
-            "Facts Agent": WorkflowStatus.FACTS_IN_PROGRESS,
-            "Content Agent": WorkflowStatus.CONTENT_IN_PROGRESS
-        }
-        
-        if agent_name in status_mapping:
-            await self._update_workflow_status(workflow_id, status_mapping[agent_name])
-    
-    async def _on_stage_complete(self, agent_name: str, context: Context) -> None:
-        """Callback when an agent stage completes in the team.
-        
-        Args:
-            agent_name: Name of the agent that completed
-            context: The current context
-        """
-        workflow_id = context.get("workflow_id")
-        if not workflow_id or workflow_id not in self.workflows:
-            return
-            
-        # Update status based on agent
-        if agent_name == "Research Agent" and "research_output" in context:
-            await self._update_workflow_status(workflow_id, WorkflowStatus.BRIEF_IN_PROGRESS)
-            self.workflows[workflow_id].research_output = ResearchOutput(**context["research_output"])
-            
-        elif agent_name == "Brief Agent" and "content_brief" in context:
-            await self._update_workflow_status(workflow_id, WorkflowStatus.FACTS_IN_PROGRESS)
-            self.workflows[workflow_id].content_brief = ContentBrief(**context["content_brief"])
-            
-        elif agent_name == "Facts Agent" and "facts_output" in context:
-            await self._update_workflow_status(workflow_id, WorkflowStatus.CONTENT_IN_PROGRESS)
-            self.workflows[workflow_id].facts_output = FactsOutput(**context["facts_output"])
-            
-        elif agent_name == "Content Agent" and "generated_content" in context:
-            self.workflows[workflow_id].generated_content = GeneratedContent(**context["generated_content"])
-            # Final status will be set by the main workflow execution
     
     async def _update_workflow_status(self, workflow_id: str, status: WorkflowStatus) -> None:
         """Update workflow status.

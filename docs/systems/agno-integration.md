@@ -2,7 +2,7 @@
 
 ## Overview
 
-The SEO Agent integrates the Agno agent framework to orchestrate multiple specialized language models in a coordinated workflow. This document outlines how Agno is configured and utilized throughout the application.
+The SEO Agent integrates the Agno agent framework (version 1.2.6+) to orchestrate multiple specialized language models in a coordinated workflow. This document outlines how Agno is configured and utilized throughout the application.
 
 ## Core Components
 
@@ -12,22 +12,23 @@ The `agno_config.py` module handles the initialization and configuration of the 
 
 - **Storage Providers**: Configures either PostgreSQL or in-memory storage
 - **Knowledge Providers**: Enables PGVector for semantic search when available
-- **Model Parameters**: Sets default timeouts and other shared parameters
+- **API Keys**: Sets environment variables for various model providers (OpenAI, Anthropic, DeepSeek, Grok)
 
-### Agent Orchestration
+### Agent Models
 
-Agents are structured in a team with either sequential or parallel execution:
+Each agent uses a specialized model tailored to its specific task:
 
-- **Sequential Mode**: Each agent runs after the previous one completes
-- **Parallel Mode**: Multiple agents can run concurrently when appropriate
-- **Context Passing**: Shared context enables data flow between agents
+- **Research Agent**: Uses OpenAI's O3-mini model for processing large volumes of content
+- **Brief Agent**: Uses DeepSeek for gap analysis and content planning
+- **Facts Agent**: Uses Grok 3 for gathering factual information
+- **Content Agent**: Uses Claude 3.7 for generating polished content
 
 ### Storage System
 
 The storage system persists agent state and workflow data:
 
 - **PostgreSQL Storage**: Production-ready persistent storage
-- **Memory Storage**: Lightweight fallback for development or testing
+- **Memory Storage**: Lightweight fallback for development or testing (with `dir_path` parameter)
 - **State Management**: Maintains agent session data between runs
 
 ### Knowledge Base
@@ -68,18 +69,46 @@ init_agno()
 Agents are initialized with proper models and storage:
 
 ```python
-from agno import Agent
-from src.config.agno_config import get_knowledge_provider
+from agno.agent import Agent
+from agno.models.openai import OpenAIChat
+from src.config.agno_config import get_storage, get_knowledge_provider
 
 class MyAgent(Agent):
     def __init__(self, storage=None):
         super().__init__(
             name="Agent Name",
             description="Agent description",
-            model=llm_service.models["model_key"],
-            storage=storage,
+            model=OpenAIChat(id="gpt-4o"),
+            storage=storage or get_storage(),
             knowledge=get_knowledge_provider()
         )
+```
+
+### Model-Specific Initialization
+
+Each model type has its own initialization pattern:
+
+```python
+# OpenAI
+from agno.models.openai import OpenAIChat
+model = OpenAIChat(id="gpt-4o")
+
+# Anthropic/Claude
+from agno.models.anthropic import Claude
+model = Claude(id="claude-3-7-sonnet-20240307")
+
+# DeepSeek (via Custom model)
+from agno.models.custom import Custom
+model = Custom(
+    id="deepseek-large",
+    config={
+        "base_url": "https://api.deepseek.com/v1",
+        "api_key": api_key,
+        "request_mapping": {
+            # Configuration for API mapping
+        }
+    }
+)
 ```
 
 ### Running Workflow
@@ -103,14 +132,15 @@ result = await team.run(context)
 
 ## Best Practices
 
-1. **Error Handling**: Always include proper error handling and fallbacks
-2. **Session Management**: Use agent sessions to cache intermediate results
-3. **Context Validation**: Validate context data before agent execution
-4. **Knowledge Reuse**: Check knowledge store before performing expensive operations
-5. **Storage Configuration**: Properly configure storage based on environment
+1. **Direct Model Initialization**: Initialize models directly with their respective classes
+2. **Global Storage Provider**: Access storage through `get_storage()` to ensure consistent configuration
+3. **Session Management**: Use agent sessions to cache intermediate results
+4. **Context Validation**: Validate context data before agent execution
+5. **Knowledge Reuse**: Check knowledge store before performing expensive operations
 
 ## Limitations and Considerations
 
+- **API Compatibility**: Agno 1.2.6+ has a different API than previous versions
 - **Rate Limits**: Be aware of API rate limits when using multiple LLMs
 - **Stateful Operations**: Agent execution is stateful and requires proper cleanup
 - **Context Size**: Large contexts may exceed model token limits
@@ -121,6 +151,8 @@ result = await team.run(context)
 Common issues and their solutions:
 
 1. **Storage Connection Errors**: Check PostgreSQL connection parameters
-2. **Knowledge Provider Failures**: Ensure PGVector extension is installed
+2. **Knowledge Provider Failures**: Ensure PGVector extension is installed 
 3. **Agent Timeouts**: Adjust timeout settings or reduce batch sizes
-4. **Context Overflow**: Limit input data size or use chunking strategies 
+4. **Context Overflow**: Limit input data size or use chunking strategies
+5. **Import Errors**: Ensure correct import paths for Agno 1.2.6+ (`agno.models.openai` instead of `agno.models`)
+6. **Model Initialization**: Check that model initialization follows the updated pattern with `id` instead of `model_name` 

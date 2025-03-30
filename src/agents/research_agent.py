@@ -1,7 +1,7 @@
 """
 Research Agent for content analysis.
 
-This agent uses the O3Mini model to analyze existing content for a target keyword,
+This agent uses LLMs to analyze existing content for a target keyword,
 identifying common topics, content structures, writing styles, and authority signals.
 """
 
@@ -11,13 +11,12 @@ import json
 from typing import Dict, Any, List, Optional
 
 import agno
-from agno import Agent, Context
-from agno.models import Model
-from agno.storage import StorageProvider
+from agno.agent import Agent
+from agno.models.openai import OpenAIChat  # Use OpenAI instead of Groq
+from agno.storage.base import Storage as StorageProvider
 
 from src.config.settings import settings
 from src.config.agno_config import get_knowledge_provider
-from src.services.llm_service import llm_service
 from src.models.content_models import ResearchOutput, ResearchTopic
 from src.utils.validation import validate_research_output
 from src.utils.error_handling import async_retry_decorator, classify_llm_error
@@ -35,15 +34,16 @@ class ResearchAgent(Agent):
         Args:
             storage: Optional storage provider for persistent state
         """
+        # Initialize with OpenAI model (GPT-4o for research capabilities)
         super().__init__(
             name="Research Agent",
             description="Analyzes existing content for a target keyword to identify patterns and opportunities.",
-            model=llm_service.models["research"],
+            model=OpenAIChat(id="gpt-4o"),  # Use GPT-4o for research
             storage=storage,
             knowledge=get_knowledge_provider()
         )
     
-    async def validate_context(self, context: Context) -> bool:
+    async def validate_context(self, context: Dict[str, Any]) -> bool:
         """Validate that the context contains required information.
         
         Args:
@@ -58,7 +58,7 @@ class ResearchAgent(Agent):
         
         return True
     
-    async def run(self, context: Context) -> Dict[str, Any]:
+    async def run(self, context: Dict[str, Any] = None) -> Dict[str, Any]:
         """Execute the research agent workflow.
         
         Args:
@@ -67,6 +67,9 @@ class ResearchAgent(Agent):
         Returns:
             Research analysis results
         """
+        # Use the context passed or the agent's own context
+        context = context or self.context
+        
         # Start timing execution
         start_time = time.time()
         
@@ -78,8 +81,8 @@ class ResearchAgent(Agent):
         logger.info(f"Starting research for keyword: {keyword}")
         
         try:
-            # Create session to persist intermediary results
-            session = await self.create_session()
+            # Create a session state dictionary to persist intermediary results
+            session = self.session_state or {}
             
             # Check knowledge store for existing research
             existing_research = await self._check_knowledge_store(keyword)
@@ -91,9 +94,15 @@ class ResearchAgent(Agent):
             sources = await self._collect_content_sources(keyword, session)
             session["sources"] = sources
             
+            # Update session state
+            self.session_state = session
+            
             # Analyze content
             analysis_results = await self._analyze_content(keyword, sources, session)
             session["analysis_results"] = analysis_results
+            
+            # Update session state
+            self.session_state = session
             
             # Process topics
             topics = await self._process_topics(analysis_results)
@@ -120,8 +129,11 @@ class ResearchAgent(Agent):
             
             logger.info(f"Research completed for keyword '{keyword}' in {execution_time:.2f} seconds")
             
-            # Save research output to context for other agents
-            context["research_output"] = research_output.dict()
+            # Update the context for other agents
+            if context is not self.context:
+                context["research_output"] = research_output.dict()
+            else:
+                self.add_context({"research_output": research_output.dict()})
             
             return research_output.dict()
         
@@ -196,62 +208,46 @@ class ResearchAgent(Agent):
             logger.info(f"Using cached sources from session for keyword: {keyword}")
             return session["sources"]
         
-        # In a real implementation, this would use a web scraping service
-        # Here we'll use Grok3 capabilities through Agno to simulate web access
-        
-        prompt = f"""
-        I need to analyze the top-ranking content for the keyword: "{keyword}"
-        
-        Please provide information about the top 10 search results, including:
-        1. Title of the page
-        2. URL
-        3. A brief summary of the content (1-2 sentences)
-        4. Estimated word count
-        5. Content type (blog post, article, product page, etc.)
-        
-        Format the response as a JSON array of objects.
-        """
-        
+        # Use our own model for web search simulation
         try:
-            # Use facts agent model (Grok) for web searches if available
-            if "grok-3" in llm_service.models:
-                schema = {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "title": {"type": "string"},
-                            "url": {"type": "string"},
-                            "summary": {"type": "string"},
-                            "word_count": {"type": "integer"},
-                            "content_type": {"type": "string"}
-                        },
-                        "required": ["title", "url", "summary", "word_count", "content_type"]
-                    }
-                }
-                
-                sources = await llm_service.generate_structured_output(
-                    model_name="grok-3",
-                    prompt=prompt,
-                    output_schema=schema
-                )
-                
-                # Limit the number of sources to analyze
-                sources = sources[:settings.agent.RESEARCH_MAX_SOURCES]
-                
-                # Cache sources in session
-                session["sources"] = sources
-                
-                return sources
+            prompt = f"""
+            I need to analyze the top-ranking content for the keyword: "{keyword}"
+            
+            Please simulate search engine results and provide information about the top 10 search results, including:
+            1. Title of the page
+            2. URL
+            3. A brief summary of the content (1-2 sentences)
+            4. Estimated word count
+            5. Content type (blog post, article, product page, etc.)
+            
+            Format the response as a JSON array of objects.
+            """
+            
+            # Just use this agent's run method with JSON mode
+            response = await self.run(
+                user_message=prompt,
+                use_json_mode=True
+            )
+            
+            # Extract the JSON data
+            if isinstance(response, dict) and "content" in response:
+                sources = response["content"]
             else:
-                # Fallback to simulated data if Grok not available
+                sources = response
+                
+            # Validate and format the sources
+            if not isinstance(sources, list):
+                logger.warning(f"Invalid sources response format: {type(sources)}. Using simulated data.")
                 sources = self._get_simulated_sources(keyword)
-                
-                # Cache sources in session
-                session["sources"] = sources
-                
-                return sources
-        
+            
+            # Limit the number of sources to analyze
+            sources = sources[:settings.agent.RESEARCH_MAX_SOURCES]
+            
+            # Cache sources in session
+            session["sources"] = sources
+            
+            return sources
+            
         except Exception as e:
             logger.warning(f"Error collecting sources: {str(e)}. Using simulated data.")
             sources = self._get_simulated_sources(keyword)
@@ -318,7 +314,7 @@ class ResearchAgent(Agent):
             logger.info(f"Using cached analysis from session for keyword: {keyword}")
             return session["analysis_results"]
         
-        # Construct prompt for the O3Mini model
+        # Construct prompt for the model
         prompt = f"""
         Analyze the following content sources for the keyword: "{keyword}"
         
@@ -394,17 +390,32 @@ class ResearchAgent(Agent):
             }
         }
         
-        # Get structured analysis using O3Mini
-        analysis = await llm_service.generate_structured_output(
-            model_name="o3-mini",
-            prompt=prompt,
-            output_schema=schema
+        # Use the agent's run method with JSON mode to get structured analysis
+        response = await self.run(
+            context={
+                "keyword": keyword,
+                "sources": sources,
+                "task": "Analyze content sources"
+            },
+            user_message=prompt,
+            response_model=None,  # Let Agno handle the response formatting
+            use_json_mode=True  # Enable JSON mode for structured output
         )
         
-        # Cache analysis in session
-        session["analysis_results"] = analysis
-        
-        return analysis
+        # Extract the JSON data from the response
+        try:
+            if isinstance(response, dict) and "content" in response:
+                analysis = response["content"]
+            else:
+                analysis = response
+                
+            # Cache analysis in session
+            session["analysis_results"] = analysis
+            
+            return analysis
+        except Exception as e:
+            logger.error(f"Error parsing analysis response: {str(e)}")
+            raise
     
     async def _process_topics(self, analysis_results: Dict[str, Any]) -> List[ResearchTopic]:
         """Process topic analysis into ResearchTopic objects.
