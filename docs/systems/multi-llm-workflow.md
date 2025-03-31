@@ -13,6 +13,14 @@ The SEO Agent employs a specialized multi-LLM workflow that leverages different 
 * **Input**: Target keyword
 * **Output**: Comprehensive analysis of existing content patterns
 
+### Research & Analysis Engine (O3Mini via OpenRouter)
+
+* **Purpose**: Process and analyze large volumes of existing content
+* **Strengths**: Efficient large context processing, detailed analytical capabilities
+* **Integration**: Accessed through the OpenRouter API for optimized cost and performance
+* **Input**: Target keyword
+* **Output**: Comprehensive analysis of existing content patterns
+
 ### Gap Analysis & Brief Creation Engine (DeepSeek)
 
 * **Purpose**: Identify content gaps and create focused briefs
@@ -133,6 +141,48 @@ The workflow management system:
 * **Model Costs**: Different models have varying pricing structures
 * **Parallel Processing**: Optional parallel execution for suitable stages
 * **Caching**: Research results are cached to optimize repeated requests
+
+## Token Pricing and Cost Management
+
+The system carefully tracks token usage across different models to optimize costs:
+
+### Current Token Pricing (as of June 2024)
+
+| Model | Input Cost (per 1K tokens) | Output Cost (per 1K tokens) |
+|-------|----------------------------|----------------------------|
+| OpenAI GPT-3.5 Turbo | $0.0005 | $0.0015 |
+| OpenAI GPT-4o | $0.005 | $0.015 |
+| OpenAI GPT-4 Turbo | $0.01 | $0.03 |
+| OpenAI GPT-4 | $0.03 | $0.06 |
+| Claude 3 Sonnet | $0.003 | $0.015 |
+| Claude 3.5 Sonnet | $0.003 | $0.015 |
+| Claude 3 Opus | $0.015 | $0.075 |
+| Claude 3 Haiku | $0.00025 | $0.00125 |
+| DeepSeek Chat | $0.00027 | $0.0011 |
+| DeepSeek Reasoner | $0.00055 | $0.00219 |
+| OpenRouter o3-mini | $0.0015 | $0.002 |
+| OpenRouter o3-preview | $0.003 | $0.004 |
+| OpenRouter gpt-4o | $0.005 | $0.015 |
+
+### Cost Management Strategies
+
+1. **Model Selection**: Each task uses the most cost-effective model for its requirements
+2. **Token Optimization**: Prompts are designed to minimize token usage while maintaining quality
+3. **Usage Tracking**: The system tracks token usage through the `TokenTracker` utility
+4. **Cost Reporting**: Detailed reports show token usage and costs for each workflow
+5. **Caching Mechanism**: Repeated research or analysis operations reuse results to avoid redundant costs
+6. **Batch Processing**: When possible, content is processed in batches to optimize token usage
+
+### Cost Estimation Example
+
+For a typical 1,500-word article, approximate token usage:
+
+* Research Phase: ~5,000 input tokens, ~3,000 output tokens
+* Brief Creation: ~4,000 input tokens, ~2,000 output tokens
+* Fact Gathering: ~3,000 input tokens, ~2,500 output tokens
+* Content Creation: ~7,500 input tokens, ~4,000 output tokens
+
+Total estimated cost: $0.30-$0.60 depending on models used
 
 ## Customization Points
 

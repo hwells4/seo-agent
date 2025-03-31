@@ -18,8 +18,12 @@ from agno.models.openai import OpenAIChat
 from agno.models.anthropic import Claude
 from agno.models.deepseek import DeepSeek
 from agno.models.xai import xAI
+from agno.models.openrouter import OpenRouter
 from agno.storage.json import JsonStorage
 from agno.tools.duckduckgo import DuckDuckGoTools
+
+# Import the token tracker
+from agents.utils.token_tracker import token_tracker
 
 # Load environment variables from .env file
 load_dotenv()
@@ -73,8 +77,9 @@ def check_api_keys():
     """Check if required API keys are set"""
     missing_keys = []
     
-    if not os.getenv("OPENAI_API_KEY"):
-        missing_keys.append("OPENAI_API_KEY")
+    # Check for OpenRouter API key (for o3-mini)
+    if not os.getenv("OPENROUTER_API_KEY"):
+        missing_keys.append("OPENROUTER_API_KEY")
     
     if not os.getenv("ANTHROPIC_API_KEY"):
         missing_keys.append("ANTHROPIC_API_KEY")
@@ -144,21 +149,28 @@ def create_content_team(brand_voice=None):
         raise ValueError("Missing API keys for one or more required services")
     
     # Get API keys
-    openai_api_key = os.getenv("OPENAI_API_KEY")
+    openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
     anthropic_api_key = os.getenv("ANTHROPIC_API_KEY")
     deepseek_api_key = os.getenv("DEEPSEEK_API_KEY")
     xai_api_key = os.getenv("XAI_API_KEY")
+    openai_api_key = os.getenv("OPENAI_API_KEY")  # Still needed for coordinator
     
     # Create storage
     storage = JsonStorage(dir_path="./content_storage")
     
-    # 1. Research & Analysis Engine (O3Mini)
+    # 1. Research & Analysis Engine (O3Mini via OpenRouter)
     research_agent = Agent(
         name="Research Engine",
         role="Analyze content to identify trends and patterns",
-        model=OpenAIChat(id="gpt-3.5-turbo-1106", api_key=openai_api_key),  # O3Mini with explicit API key
+        model=OpenRouter(
+            id="openai/o3-mini",  # Specify the o3-mini model
+            max_tokens=1000,  # Increased token limit for research output
+            temperature=0.7,
+            api_key=openrouter_api_key  # Explicitly pass the API key
+        ),
         storage=storage,
         tools=[DuckDuckGoTools()],
+        markdown=True,
         instructions=dedent("""
             You are a content research specialist.
             
@@ -337,6 +349,9 @@ def run_content_pipeline(topic, brand_voice=None, word_count=500, save_results=T
     """
     logger.info(f"Starting content creation pipeline for topic: {topic}")
     
+    # Reset token tracker for this run
+    token_tracker.reset()
+    
     # Initialize all agents
     research_agent, brief_agent, facts_agent, content_agent = create_content_team(brand_voice)
     
@@ -345,16 +360,39 @@ def run_content_pipeline(topic, brand_voice=None, word_count=500, save_results=T
         "steps": {}
     }
     
-    # Step 1: Research topic
-    logger.info("Step 1: Running Research Engine")
-    research_prompt = f"Analyze content structure and trends for '{topic}' in 200 words or less"
-    research_response = research_agent.run(research_prompt)
-    research_result = research_response.content if hasattr(research_response, 'content') else str(research_response)
+    # Step 1: Research topic with O3Mini through OpenRouter
+    logger.info("Step 1: Running Research Engine with O3Mini via OpenRouter")
+    research_prompt = f"Analyze content structure and trends for '{topic}' in 300 words or less"
+    
+    try:
+        logger.info("Sending prompt to o3-mini via OpenRouter (non-streaming)...")
+        research_response = research_agent.run(research_prompt, stream=False)
+        
+        # Extract the response text based on response format
+        if hasattr(research_response, 'content'):
+            research_result = research_response.content
+        else:
+            research_result = str(research_response)
+            
+        logger.info(f"Research output received ({len(research_result)} chars)")
+    except Exception as e:
+        logger.error(f"Error with OpenRouter research: {str(e)}")
+        # Fallback message
+        research_result = f"Error in research phase: {str(e)}"
+    
+    # Track token usage for research step
+    token_tracker.track_step(
+        step_name="research",
+        provider="openrouter",
+        model="o3-mini",
+        input_text=research_prompt,
+        output_text=research_result
+    )
+    
     results["steps"]["research"] = {
         "prompt": research_prompt,
         "output": research_result
     }
-    logger.info(f"Research output received ({len(research_result)} chars)")
     
     # Step 2: Create brief based on research
     logger.info("Step 2: Running Brief Creator")
@@ -369,6 +407,15 @@ def run_content_pipeline(topic, brand_voice=None, word_count=500, save_results=T
         """
     brief_response = brief_agent.run(brief_prompt)
     brief_result = brief_response.content if hasattr(brief_response, 'content') else str(brief_response)
+    
+    # Track token usage for brief creation step
+    token_tracker.track_step(
+        step_name="brief",
+        provider="deepseek",
+        model="deepseek-chat",
+        input_text=brief_prompt,
+        output_text=brief_result
+    )
     
     # Extract gap analysis
     gap_analysis = extract_gap_analysis(brief_result)
@@ -390,6 +437,16 @@ def run_content_pipeline(topic, brand_voice=None, word_count=500, save_results=T
     
     facts_response = facts_agent.run(facts_prompt)
     facts_result = facts_response.content if hasattr(facts_response, 'content') else str(facts_response)
+    
+    # Track token usage for facts collection step
+    token_tracker.track_step(
+        step_name="facts",
+        provider="xai",
+        model="grok-beta",
+        input_text=facts_prompt,
+        output_text=facts_result
+    )
+    
     results["steps"]["facts"] = {
         "prompt": facts_prompt,
         "output": facts_result
@@ -414,11 +471,28 @@ def run_content_pipeline(topic, brand_voice=None, word_count=500, save_results=T
         """
     content_response = content_agent.run(content_prompt)
     content_result = content_response.content if hasattr(content_response, 'content') else str(content_response)
+    
+    # Track token usage for content creation step
+    token_tracker.track_step(
+        step_name="content",
+        provider="anthropic",
+        model="claude-3-sonnet-20240229",
+        input_text=content_prompt,
+        output_text=content_result
+    )
+    
     results["steps"]["content"] = {
         "prompt": content_prompt,
         "output": content_result
     }
     logger.info(f"Content output received ({len(content_result)} chars)")
+    
+    # Get token usage report
+    token_usage = token_tracker.get_usage_report()
+    results["token_usage"] = token_usage
+    
+    # Print token usage report
+    token_tracker.print_usage_report()
     
     # Save results to a file
     if save_results:
@@ -428,6 +502,9 @@ def run_content_pipeline(topic, brand_voice=None, word_count=500, save_results=T
         with open(filename, "w") as f:
             json.dump(results, f, indent=2)
         logger.info(f"Content results saved to {filename}")
+        
+        # Save token usage report separately
+        token_tracker.save_report_to_file(f"token_usage_{timestamp}.json")
     
     logger.info("Content creation pipeline completed")
     return results

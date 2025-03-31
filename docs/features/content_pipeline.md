@@ -22,9 +22,11 @@ The content pipeline follows these sequential steps:
 
 ## Agent Roles and Outputs
 
-### 1. Research Engine (O3Mini)
+### 1. Research Engine (O3Mini via OpenRouter)
 
-**Role**: The Research Engine analyzes existing top-performing content on the given topic to understand what works well in terms of structure, themes, and approaches.
+**Role**: The Research Engine analyzes existing top-performing content on the given topic to understand what works well in terms of structure, themes, and approaches. This agent uses the O3Mini model accessed through OpenRouter for efficient and cost-effective content analysis.
+
+**Integration**: This agent connects to OpenRouter to access the o3-mini model, providing a balance of quality and cost-effectiveness for the research phase.
 
 **Input**: 
 - Topic
