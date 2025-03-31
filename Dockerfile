@@ -15,8 +15,8 @@ RUN apt-get update && \
 # Copy requirements first to leverage Docker cache
 COPY requirements.txt .
 
-# Install Python dependencies with specific order to handle dependencies
-RUN pip install --no-cache-dir openai>=1.0.0,<2.0.0 && \
+# Install Python dependencies
+RUN pip install --no-cache-dir "openai>=1.0.0,<2.0.0" && \
     pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application
@@ -41,9 +41,14 @@ EXPOSE 8000
 HEALTHCHECK --interval=5s --timeout=3s --start-period=5s --retries=3 \
     CMD /healthcheck.sh
 
-# Create startup script
+# Create startup script with environment variable check
 RUN echo '#!/bin/sh\n\
 echo "Starting server on port 8000..."\n\
+echo "Checking environment variables..."\n\
+if [ -z "$OPENAI_API_KEY" ]; then echo "Warning: OPENAI_API_KEY not set"; fi\n\
+if [ -z "$ANTHROPIC_API_KEY" ]; then echo "Warning: ANTHROPIC_API_KEY not set"; fi\n\
+if [ -z "$DEEPSEEK_API_KEY" ]; then echo "Warning: DEEPSEEK_API_KEY not set"; fi\n\
+if [ -z "$XAI_API_KEY" ]; then echo "Warning: XAI_API_KEY not set"; fi\n\
 python3 -m uvicorn minimal_server:app --host 0.0.0.0 --port 8000 --log-level debug' > /start.sh && \
     chmod +x /start.sh
 
