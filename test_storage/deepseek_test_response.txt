@@ -1,0 +1,1 @@
+Token estimation in LLMs predicts the number of tokens a given text will consume, helping manage input limits and computational costs.

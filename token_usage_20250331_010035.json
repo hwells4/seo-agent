@@ -1,0 +1,92 @@
+{
+  "usage": {
+    "openai": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost": 0.0,
+      "calls": 0
+    },
+    "anthropic": {
+      "input_tokens": 1376,
+      "output_tokens": 303,
+      "cost": 0.008673,
+      "calls": 1
+    },
+    "deepseek": {
+      "input_tokens": 509,
+      "output_tokens": 412,
+      "cost": 0.00059063,
+      "calls": 1
+    },
+    "xai": {
+      "input_tokens": 319,
+      "output_tokens": 463,
+      "cost": 0.000854,
+      "calls": 1
+    },
+    "openrouter": {
+      "input_tokens": 21,
+      "output_tokens": 443,
+      "cost": 0.0009175,
+      "calls": 1
+    },
+    "total": {
+      "input_tokens": 2225,
+      "output_tokens": 1621,
+      "cost": 0.01103513,
+      "calls": 4
+    }
+  },
+  "step_usage": {
+    "research": [
+      {
+        "provider": "openrouter",
+        "model": "o3-mini",
+        "input_tokens": 21,
+        "output_tokens": 443,
+        "input_cost": 3.15e-05,
+        "output_cost": 0.0008860000000000001,
+        "total_cost": 0.0009175,
+        "timestamp": "2025-03-31T00:59:51.216507"
+      }
+    ],
+    "brief": [
+      {
+        "provider": "deepseek",
+        "model": "deepseek-chat",
+        "input_tokens": 509,
+        "output_tokens": 412,
+        "input_cost": 0.00013743000000000002,
+        "output_cost": 0.0004532,
+        "total_cost": 0.00059063,
+        "timestamp": "2025-03-31T01:00:12.839123"
+      }
+    ],
+    "facts": [
+      {
+        "provider": "xai",
+        "model": "grok-beta",
+        "input_tokens": 319,
+        "output_tokens": 463,
+        "input_cost": 0.0001595,
+        "output_cost": 0.0006945,
+        "total_cost": 0.000854,
+        "timestamp": "2025-03-31T01:00:27.069592"
+      }
+    ],
+    "content": [
+      {
+        "provider": "anthropic",
+        "model": "claude-3-sonnet-20240229",
+        "input_tokens": 1376,
+        "output_tokens": 303,
+        "input_cost": 0.004128,
+        "output_cost": 0.0045449999999999996,
+        "total_cost": 0.008673,
+        "timestamp": "2025-03-31T01:00:35.464928"
+      }
+    ]
+  },
+  "session_start": "2025-03-31T00:59:45.580461",
+  "session_duration": "0:00:49.887132"
+}

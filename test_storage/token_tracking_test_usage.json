@@ -1,0 +1,86 @@
+{
+  "usage": {
+    "openai": {
+      "input_tokens": 15,
+      "output_tokens": 44,
+      "cost": 7.35e-05,
+      "calls": 1
+    },
+    "anthropic": {
+      "input_tokens": 15,
+      "output_tokens": 46,
+      "cost": 0.000735,
+      "calls": 1
+    },
+    "deepseek": {
+      "input_tokens": 15,
+      "output_tokens": 25,
+      "cost": 4.5e-05,
+      "calls": 1
+    },
+    "xai": {
+      "input_tokens": 15,
+      "output_tokens": 40,
+      "cost": 6.75e-05,
+      "calls": 1
+    },
+    "total": {
+      "input_tokens": 60,
+      "output_tokens": 155,
+      "cost": 0.0009209999999999999,
+      "calls": 4
+    }
+  },
+  "step_usage": {
+    "openai_test": [
+      {
+        "provider": "openai",
+        "model": "gpt-3.5-turbo",
+        "input_tokens": 15,
+        "output_tokens": 44,
+        "input_cost": 7.5e-06,
+        "output_cost": 6.599999999999999e-05,
+        "total_cost": 7.35e-05,
+        "timestamp": "2025-03-31T00:09:04.321281"
+      }
+    ],
+    "anthropic_test": [
+      {
+        "provider": "anthropic",
+        "model": "claude-3-sonnet-20240229",
+        "input_tokens": 15,
+        "output_tokens": 46,
+        "input_cost": 4.4999999999999996e-05,
+        "output_cost": 0.00069,
+        "total_cost": 0.000735,
+        "timestamp": "2025-03-31T00:09:05.963621"
+      }
+    ],
+    "deepseek_test": [
+      {
+        "provider": "deepseek",
+        "model": "deepseek-chat",
+        "input_tokens": 15,
+        "output_tokens": 25,
+        "input_cost": 7.5e-06,
+        "output_cost": 3.7500000000000003e-05,
+        "total_cost": 4.5e-05,
+        "timestamp": "2025-03-31T00:09:12.172315"
+      }
+    ],
+    "xai_test": [
+      {
+        "provider": "xai",
+        "model": "grok-beta",
+        "input_tokens": 15,
+        "output_tokens": 40,
+        "input_cost": 7.5e-06,
+        "output_cost": 6e-05,
+        "total_cost": 6.75e-05,
+        "timestamp": "2025-03-31T00:09:13.440849"
+      }
+    ]
+  },
+  "session_start": "2025-03-31T00:09:03.097386",
+  "session_duration": "0:00:10.344006"
+}

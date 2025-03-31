@@ -1,0 +1,264 @@
+{
+    "session_id": "ceb06e00-f4c9-462b-85bf-762c9721a0dc",
+    "user_id": null,
+    "team_session_id": null,
+    "memory": {
+        "update_system_message_on_change": false,
+        "create_session_summary": false,
+        "update_session_summary_after_run": true,
+        "create_user_memories": false,
+        "update_user_memories_after_run": true,
+        "messages": [
+            {
+                "content": "<your_role>\nAnalyze content to identify trends and patterns\n</your_role>\n\n<instructions>\n\nYou are a content research specialist.\n\nWhen given a topic:\n1. Search for top-ranking content on this topic\n2. Analyze their structure, style, and coverage\n3. Identify common topics, subtopics, and patterns\n4. Determine content styles that perform well\n5. Provide a comprehensive analysis summary\n\nYour output should be a detailed analysis report that includes:\n- Key topics covered by top-performing content\n- Common content structures and formats\n- Typical tone and style elements\n- Depth of coverage in successful content\n- Notable authority signals used\n\n</instructions>\n\n<additional_information>\n- Use markdown to format your answers.\n</additional_information>",
+                "from_history": false,
+                "stop_after_tool_call": false,
+                "role": "system",
+                "created_at": 1743400565
+            },
+            {
+                "content": "Analyze content structure and trends for 'productivity tips for remote work' in 300 words or less",
+                "from_history": false,
+                "stop_after_tool_call": false,
+                "role": "user",
+                "created_at": 1743400565
+            },
+            {
+                "content": "# Analysis of \"Productivity Tips for Remote Work\" Content Trends\n\n**Key Topics Covered:**\n- **Time Management:** Strategies such as the Pomodoro Technique, daily planning, and prioritization.\n- **Workspace Optimization:** Advice on ergonomic setups, dedicated workspaces, and minimizing distractions.\n- **Technology & Tools:** Reviews and recommendations of productivity and collaboration software (e.g., project management tools, communication apps).\n- **Work-Life Balance:** Insights on setting boundaries, managing burnout, and maintaining mental health while working remotely.\n- **Communication:** Emphasis on effective virtual communication and regular check-ins with teams.\n\n**Common Structural Patterns and Formats:**\n- **Introduction:** Typically starts with an overview of the remote work trend and the challenges it brings.\n- **Listicles and How-To Guides:** Content is often organized as numbered lists or step-by-step guides for easy consumption.\n- **Subheadings and Breakout Sections:** Clear separation of topics with subheadings for readability.\n- **Visual Elements:** Use of infographics, charts, and screenshots to illustrate tips and make the content engaging.\n- **Case Studies and Real Examples:** Inclusion of relatable anecdotes or mini case studies to validate tips and enhance credibility.\n\n**Tone and Style Elements:**\n- **Practical and Actionable:** Advice tends to be straightforward and geared toward immediate application.\n- **Conversational Yet Professional:** A friendly tone is maintained to connect with readers but also includes enough data and expert insights to maintain authority.\n- **Inclusive Approach:** Tips are often tailored to suit both beginners and experienced remote workers.\n\n**Depth of Coverage:**\n- **Balanced Detail:** Most content pieces are moderate in depth, offering sufficient explanation without overwhelming.\n- **Linkage to Further Resources:** Use of external links to in-depth articles or tool reviews to support readers who seek more detail.\n\n**Notable Authority Signals:**\n- **Expert Quotations:** Frequent use of quotes from productivity experts or remote work advocates.\n- **Data-Driven Insights:** Incorporation of relevant statistics to back up claims.\n- **Author Credentials:** Expertise often highlighted through author bios or linked profiles to build trust.\n\nThis comprehensive approach not only meets the immediate needs of remote workers but also builds long-term trust in the content creator's expertise.",
+                "from_history": false,
+                "stop_after_tool_call": false,
+                "role": "assistant",
+                "metrics": {
+                    "input_tokens": 314,
+                    "output_tokens": 591,
+                    "total_tokens": 905,
+                    "prompt_tokens": 314,
+                    "completion_tokens": 591,
+                    "prompt_tokens_details": {
+                        "cached_tokens": 0
+                    },
+                    "completion_tokens_details": {
+                        "reasoning_tokens": 128
+                    },
+                    "time": 10.756693750008708
+                },
+                "created_at": 1743400565
+            }
+        ],
+        "runs": [
+            {
+                "message": {
+                    "content": "Analyze content structure and trends for 'productivity tips for remote work' in 300 words or less",
+                    "from_history": false,
+                    "stop_after_tool_call": false,
+                    "role": "user",
+                    "created_at": 1743400565
+                },
+                "response": {
+                    "content": "# Analysis of \"Productivity Tips for Remote Work\" Content Trends\n\n**Key Topics Covered:**\n- **Time Management:** Strategies such as the Pomodoro Technique, daily planning, and prioritization.\n- **Workspace Optimization:** Advice on ergonomic setups, dedicated workspaces, and minimizing distractions.\n- **Technology & Tools:** Reviews and recommendations of productivity and collaboration software (e.g., project management tools, communication apps).\n- **Work-Life Balance:** Insights on setting boundaries, managing burnout, and maintaining mental health while working remotely.\n- **Communication:** Emphasis on effective virtual communication and regular check-ins with teams.\n\n**Common Structural Patterns and Formats:**\n- **Introduction:** Typically starts with an overview of the remote work trend and the challenges it brings.\n- **Listicles and How-To Guides:** Content is often organized as numbered lists or step-by-step guides for easy consumption.\n- **Subheadings and Breakout Sections:** Clear separation of topics with subheadings for readability.\n- **Visual Elements:** Use of infographics, charts, and screenshots to illustrate tips and make the content engaging.\n- **Case Studies and Real Examples:** Inclusion of relatable anecdotes or mini case studies to validate tips and enhance credibility.\n\n**Tone and Style Elements:**\n- **Practical and Actionable:** Advice tends to be straightforward and geared toward immediate application.\n- **Conversational Yet Professional:** A friendly tone is maintained to connect with readers but also includes enough data and expert insights to maintain authority.\n- **Inclusive Approach:** Tips are often tailored to suit both beginners and experienced remote workers.\n\n**Depth of Coverage:**\n- **Balanced Detail:** Most content pieces are moderate in depth, offering sufficient explanation without overwhelming.\n- **Linkage to Further Resources:** Use of external links to in-depth articles or tool reviews to support readers who seek more detail.\n\n**Notable Authority Signals:**\n- **Expert Quotations:** Frequent use of quotes from productivity experts or remote work advocates.\n- **Data-Driven Insights:** Incorporation of relevant statistics to back up claims.\n- **Author Credentials:** Expertise often highlighted through author bios or linked profiles to build trust.\n\nThis comprehensive approach not only meets the immediate needs of remote workers but also builds long-term trust in the content creator's expertise.",
+                    "content_type": "str",
+                    "event": "RunResponse",
+                    "metrics": {
+                        "input_tokens": [
+                            314
+                        ],
+                        "output_tokens": [
+                            591
+                        ],
+                        "total_tokens": [
+                            905
+                        ],
+                        "prompt_tokens": [
+                            314
+                        ],
+                        "completion_tokens": [
+                            591
+                        ],
+                        "prompt_tokens_details": [
+                            {
+                                "cached_tokens": 0
+                            }
+                        ],
+                        "completion_tokens_details": [
+                            {
+                                "reasoning_tokens": 128
+                            }
+                        ],
+                        "time": [
+                            10.756693750008708
+                        ]
+                    },
+                    "model": "openai/o3-mini",
+                    "run_id": "b688bdac-bef6-4931-b039-ca5a4661ffc8",
+                    "agent_id": "076baab8-7e88-49ca-bf97-eabfb9581342",
+                    "session_id": "ceb06e00-f4c9-462b-85bf-762c9721a0dc",
+                    "tools": [],
+                    "created_at": 1743400560,
+                    "messages": [
+                        {
+                            "content": "<your_role>\nAnalyze content to identify trends and patterns\n</your_role>\n\n<instructions>\n\nYou are a content research specialist.\n\nWhen given a topic:\n1. Search for top-ranking content on this topic\n2. Analyze their structure, style, and coverage\n3. Identify common topics, subtopics, and patterns\n4. Determine content styles that perform well\n5. Provide a comprehensive analysis summary\n\nYour output should be a detailed analysis report that includes:\n- Key topics covered by top-performing content\n- Common content structures and formats\n- Typical tone and style elements\n- Depth of coverage in successful content\n- Notable authority signals used\n\n</instructions>\n\n<additional_information>\n- Use markdown to format your answers.\n</additional_information>",
+                            "from_history": false,
+                            "stop_after_tool_call": false,
+                            "role": "system",
+                            "created_at": 1743400565
+                        },
+                        {
+                            "content": "Analyze content structure and trends for 'productivity tips for remote work' in 300 words or less",
+                            "from_history": false,
+                            "stop_after_tool_call": false,
+                            "role": "user",
+                            "created_at": 1743400565
+                        },
+                        {
+                            "content": "# Analysis of \"Productivity Tips for Remote Work\" Content Trends\n\n**Key Topics Covered:**\n- **Time Management:** Strategies such as the Pomodoro Technique, daily planning, and prioritization.\n- **Workspace Optimization:** Advice on ergonomic setups, dedicated workspaces, and minimizing distractions.\n- **Technology & Tools:** Reviews and recommendations of productivity and collaboration software (e.g., project management tools, communication apps).\n- **Work-Life Balance:** Insights on setting boundaries, managing burnout, and maintaining mental health while working remotely.\n- **Communication:** Emphasis on effective virtual communication and regular check-ins with teams.\n\n**Common Structural Patterns and Formats:**\n- **Introduction:** Typically starts with an overview of the remote work trend and the challenges it brings.\n- **Listicles and How-To Guides:** Content is often organized as numbered lists or step-by-step guides for easy consumption.\n- **Subheadings and Breakout Sections:** Clear separation of topics with subheadings for readability.\n- **Visual Elements:** Use of infographics, charts, and screenshots to illustrate tips and make the content engaging.\n- **Case Studies and Real Examples:** Inclusion of relatable anecdotes or mini case studies to validate tips and enhance credibility.\n\n**Tone and Style Elements:**\n- **Practical and Actionable:** Advice tends to be straightforward and geared toward immediate application.\n- **Conversational Yet Professional:** A friendly tone is maintained to connect with readers but also includes enough data and expert insights to maintain authority.\n- **Inclusive Approach:** Tips are often tailored to suit both beginners and experienced remote workers.\n\n**Depth of Coverage:**\n- **Balanced Detail:** Most content pieces are moderate in depth, offering sufficient explanation without overwhelming.\n- **Linkage to Further Resources:** Use of external links to in-depth articles or tool reviews to support readers who seek more detail.\n\n**Notable Authority Signals:**\n- **Expert Quotations:** Frequent use of quotes from productivity experts or remote work advocates.\n- **Data-Driven Insights:** Incorporation of relevant statistics to back up claims.\n- **Author Credentials:** Expertise often highlighted through author bios or linked profiles to build trust.\n\nThis comprehensive approach not only meets the immediate needs of remote workers but also builds long-term trust in the content creator's expertise.",
+                            "from_history": false,
+                            "stop_after_tool_call": false,
+                            "role": "assistant",
+                            "metrics": {
+                                "input_tokens": 314,
+                                "output_tokens": 591,
+                                "total_tokens": 905,
+                                "prompt_tokens": 314,
+                                "completion_tokens": 591,
+                                "prompt_tokens_details": {
+                                    "cached_tokens": 0
+                                },
+                                "completion_tokens_details": {
+                                    "reasoning_tokens": 128
+                                },
+                                "time": 10.756693750008708
+                            },
+                            "created_at": 1743400565
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "session_data": {
+        "session_metrics": {
+            "input_tokens": 314,
+            "output_tokens": 591,
+            "total_tokens": 905,
+            "prompt_tokens": 314,
+            "completion_tokens": 591,
+            "prompt_tokens_details": {
+                "cached_tokens": 0
+            },
+            "completion_tokens_details": {
+                "reasoning_tokens": 128
+            },
+            "additional_metrics": null,
+            "time": 10.756693750008708,
+            "time_to_first_token": null,
+            "timer": null
+        }
+    },
+    "extra_data": null,
+    "created_at": 1743400575,
+    "updated_at": 1743400575,
+    "agent_id": "076baab8-7e88-49ca-bf97-eabfb9581342",
+    "agent_data": {
+        "name": "Research Engine",
+        "agent_id": "076baab8-7e88-49ca-bf97-eabfb9581342",
+        "model": {
+            "id": "openai/o3-mini",
+            "name": "OpenRouter",
+            "provider": "OpenRouter",
+            "functions": {
+                "duckduckgo_search": {
+                    "name": "duckduckgo_search",
+                    "description": "Use this function to search DuckDuckGo for a query.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "query": {
+                                "type": "string",
+                                "description": "(str) The query to search for."
+                            },
+                            "max_results": {
+                                "type": "number",
+                                "description": "(optional, default=5) The maximum number of results to return."
+                            }
+                        },
+                        "required": [
+                            "query"
+                        ]
+                    }
+                },
+                "duckduckgo_news": {
+                    "name": "duckduckgo_news",
+                    "description": "Use this function to get the latest news from DuckDuckGo.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "query": {
+                                "type": "string",
+                                "description": "(str) The query to search for."
+                            },
+                            "max_results": {
+                                "type": "number",
+                                "description": "(optional, default=5) The maximum number of results to return."
+                            }
+                        },
+                        "required": [
+                            "query"
+                        ]
+                    }
+                }
+            },
+            "max_tokens": 1000,
+            "response_format": "None",
+            "temperature": 0.7,
+            "tools": [
+                {
+                    "type": "function",
+                    "function": {
+                        "name": "duckduckgo_search",
+                        "description": "Use this function to search DuckDuckGo for a query.",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "query": {
+                                    "type": "string",
+                                    "description": "(str) The query to search for."
+                                },
+                                "max_results": {
+                                    "type": "number",
+                                    "description": "(optional, default=5) The maximum number of results to return."
+                                }
+                            },
+                            "required": [
+                                "query"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "function",
+                    "function": {
+                        "name": "duckduckgo_news",
+                        "description": "Use this function to get the latest news from DuckDuckGo.",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "query": {
+                                    "type": "string",
+                                    "description": "(str) The query to search for."
+                                },
+                                "max_results": {
+                                    "type": "number",
+                                    "description": "(optional, default=5) The maximum number of results to return."
+                                }
+                            },
+                            "required": [
+                                "query"
+                            ]
+                        }
+                    }
+                }
+            ],
+            "tool_choice": "auto"
+        }
+    }
+}

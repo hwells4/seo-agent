@@ -1,0 +1,1 @@
+Token pricing in large language models (LLMs) refers to the practice of charging based on the number of tokens (words or word pieces) used in generating text output, rather than a fixed cost per request or time-based pricing.

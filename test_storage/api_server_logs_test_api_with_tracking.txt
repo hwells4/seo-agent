@@ -1,0 +1,136 @@
+=== STDOUT ===
+INFO:     127.0.0.1:57541 - "POST /api/v1/content HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57543 - "GET /api/v1/workflows/08c3bd95-91cc-4637-9a09-e08cc4a58674 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57549 - "GET /api/v1/workflows/08c3bd95-91cc-4637-9a09-e08cc4a58674 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57553 - "GET /api/v1/workflows/08c3bd95-91cc-4637-9a09-e08cc4a58674 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57558 - "GET /api/v1/workflows/08c3bd95-91cc-4637-9a09-e08cc4a58674 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57563 - "GET /api/v1/workflows/08c3bd95-91cc-4637-9a09-e08cc4a58674 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57569 - "GET /api/v1/workflows/08c3bd95-91cc-4637-9a09-e08cc4a58674 HTTP/1.1" 200 OK
+
+===== TOKEN USAGE REPORT =====
+Session started: 2025-03-31T01:01:34.939337
+Session duration: 0:00:55.452590
+
+ANTHROPIC:
+  Calls: 1
+  Input tokens: 1,513
+  Output tokens: 333
+  Total tokens: 1,846
+  Cost: $0.0095
+
+DEEPSEEK:
+  Calls: 1
+  Input tokens: 504
+  Output tokens: 456
+  Total tokens: 960
+  Cost: $0.0006
+
+XAI:
+  Calls: 1
+  Input tokens: 355
+  Output tokens: 561
+  Total tokens: 916
+  Cost: $0.0010
+
+OPENROUTER:
+  Calls: 1
+  Input tokens: 21
+  Output tokens: 438
+  Total tokens: 459
+  Cost: $0.0009
+
+TOTAL USAGE:
+  Calls: 4
+  Input tokens: 2,393
+  Output tokens: 1,788
+  Total tokens: 4,181
+  Total cost: $0.0121
+
+USAGE BY STEP:
+
+  research:
+    Calls: 1
+    Total tokens: 459
+    Cost: $0.0009
+      openrouter:o3-mini:
+        Calls: 1
+        Total tokens: 459
+        Cost: $0.0009
+
+  brief:
+    Calls: 1
+    Total tokens: 960
+    Cost: $0.0006
+      deepseek:deepseek-chat:
+        Calls: 1
+        Total tokens: 960
+        Cost: $0.0006
+
+  facts:
+    Calls: 1
+    Total tokens: 916
+    Cost: $0.0010
+      xai:grok-beta:
+        Calls: 1
+        Total tokens: 916
+        Cost: $0.0010
+
+  content:
+    Calls: 1
+    Total tokens: 1,846
+    Cost: $0.0095
+      anthropic:claude-3-sonnet-20240229:
+        Calls: 1
+        Total tokens: 1,846
+        Cost: $0.0095
+==============================
+INFO:     127.0.0.1:57574 - "GET /api/v1/workflows/08c3bd95-91cc-4637-9a09-e08cc4a58674 HTTP/1.1" 200 OK
+
+=== STDERR ===
+INFO:     Will watch for changes in these directories: ['/Users/harrisonwells/seo-agent/seo-agent']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [48630] using StatReload
+INFO:     Started server process [48632]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:content_creation:Starting content creation pipeline for topic: productivity tips for remote work
+INFO:token_tracker:Token tracker reset
+INFO:content_creation:Content creation team initialized
+INFO:content_creation:Step 1: Running Research Engine with O3Mini via OpenRouter
+INFO:content_creation:Sending prompt to o3-mini via OpenRouter (non-streaming)...
+INFO:httpx:HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.agno.com/v1/telemetry/agent/run/create "HTTP/1.1 200 OK"
+INFO:content_creation:Research output received (2383 chars)
+INFO:token_tracker:Step research: Tracked openrouter (o3-mini): 21 input, 438 output tokens
+INFO:content_creation:Step 2: Running Brief Creator
+INFO:httpx:HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.agno.com/v1/telemetry/agent/run/create "HTTP/1.1 200 OK"
+INFO:token_tracker:Step brief: Tracked deepseek (deepseek-chat): 504 input, 456 output tokens
+INFO:content_creation:Gap Analysis extracted with fallback method (591 chars)
+INFO:content_creation:Brief output received (2039 chars)
+INFO:content_creation:Gap Analysis extracted (591 chars)
+INFO:content_creation:Step 3: Running Facts Collector
+INFO:httpx:HTTP Request: POST https://api.x.ai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:primp:response: https://duckduckgo.com/?q=productivity+tips+for+remote+work 200
+INFO:primp:response: https://duckduckgo.com/news.js?l=wt-wt&o=json&noamp=1&q=productivity+tips+for+remote+work&vqd=4-237814728909634347597298165666530782106&p=-1 200
+INFO:httpx:HTTP Request: POST https://api.x.ai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:primp:response: https://html.duckduckgo.com/html 200
+INFO:httpx:HTTP Request: POST https://api.x.ai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:primp:response: https://lite.duckduckgo.com/lite/ 200
+INFO:httpx:HTTP Request: POST https://api.x.ai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.agno.com/v1/telemetry/agent/run/create "HTTP/1.1 200 OK"
+INFO:token_tracker:Step facts: Tracked xai (grok-beta): 355 input, 561 output tokens
+INFO:content_creation:Facts output received (2546 chars)
+INFO:content_creation:Step 4: Running Content Creator
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.agno.com/v1/telemetry/agent/run/create "HTTP/1.1 200 OK"
+INFO:token_tracker:Step content: Tracked anthropic (claude-3-sonnet-20240229): 1513 input, 333 output tokens
+INFO:content_creation:Content output received (1560 chars)
+INFO:content_creation:Content results saved to content_results_20250331_010230.json
+INFO:token_tracker:Token usage report saved to token_usage_20250331_010230.json
+INFO:content_creation:Content creation pipeline completed
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [48632]
+INFO:     Stopping reloader process [48630]

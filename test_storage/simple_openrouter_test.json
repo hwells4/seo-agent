@@ -1,0 +1,9 @@
+{
+  "model": "openai/o3-mini",
+  "content": "SEO, or Search Engine Optimization, is the practice of enhancing a website's content and structure to improve its visibility and ranking on search engine results pages.",
+  "usage": {
+    "prompt_tokens": 15,
+    "completion_tokens": 105,
+    "total_tokens": 120
+  }
+}

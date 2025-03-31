@@ -1,0 +1,1 @@
+Token tracking in LLMs refers to the process of monitoring and updating the information of tokens, such as words or subwords, during the model's training and inference stages to capture the context and generate more accurate predictions.

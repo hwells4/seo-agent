@@ -1,0 +1,1 @@
+Cost calculation in LLMs involves assessing the computational resources, time, and energy required to train and run the models, often measured in terms of FLOPs, memory usage, and inference time.

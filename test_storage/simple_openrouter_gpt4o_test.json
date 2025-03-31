@@ -1,0 +1,9 @@
+{
+  "model": "openai/gpt-4o",
+  "content": "SEO, or Search Engine Optimization, is the practice of enhancing a website's visibility and ranking on search engine results pages through various techniques and strategies to increase organic (non-paid) traffic.",
+  "usage": {
+    "prompt_tokens": 16,
+    "completion_tokens": 38,
+    "total_tokens": 54
+  }
+}

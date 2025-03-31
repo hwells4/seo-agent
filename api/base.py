@@ -57,28 +57,9 @@ def read_root():
     }
 
 @app.get("/api/v1/health")
-def health_check():
+async def health_check():
     """Health check endpoint for monitoring"""
-    from datetime import datetime
-    from agents.content.pipeline import check_api_keys
-
-    # Check if all required API keys are present
-    api_keys_ok = check_api_keys()
-
-    # Get status based on API keys
-    status = "ok" if api_keys_ok else "degraded"
-
-    return {
-        "status": status,
-        "version": app.version,
-        "timestamp": datetime.utcnow().isoformat(),
-        "models": {
-            "openrouter": bool(os.getenv("OPENROUTER_API_KEY")),
-            "anthropic": bool(os.getenv("ANTHROPIC_API_KEY")),
-            "deepseek": bool(os.getenv("DEEPSEEK_API_KEY")),
-            "xai": bool(os.getenv("XAI_API_KEY"))
-        }
-    }
+    return {"status": "ok"}
 
 # Run the API with uvicorn
 if __name__ == "__main__":

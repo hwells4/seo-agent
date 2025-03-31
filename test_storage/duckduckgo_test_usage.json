@@ -1,0 +1,50 @@
+{
+  "usage": {
+    "openai": {
+      "input_tokens": 16,
+      "output_tokens": 89,
+      "cost": 0.0001415,
+      "calls": 1
+    },
+    "anthropic": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost": 0.0,
+      "calls": 0
+    },
+    "deepseek": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost": 0.0,
+      "calls": 0
+    },
+    "xai": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost": 0.0,
+      "calls": 0
+    },
+    "total": {
+      "input_tokens": 16,
+      "output_tokens": 89,
+      "cost": 0.0001415,
+      "calls": 1
+    }
+  },
+  "step_usage": {
+    "duckduckgo_test": [
+      {
+        "provider": "openai",
+        "model": "gpt-3.5-turbo",
+        "input_tokens": 16,
+        "output_tokens": 89,
+        "input_cost": 8e-06,
+        "output_cost": 0.0001335,
+        "total_cost": 0.0001415,
+        "timestamp": "2025-03-31T00:08:56.332739"
+      }
+    ]
+  },
+  "session_start": "2025-03-31T00:08:52.963737",
+  "session_duration": "0:00:03.370629"
+}
