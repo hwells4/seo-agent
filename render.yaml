@@ -4,6 +4,9 @@ services:
     env: python
     buildCommand: |
       echo "Python version:" && python --version
+      echo "Setting up environment..."
+      export PYTHONPATH=/app
+      echo "PYTHONPATH set to: $PYTHONPATH"
       echo "Installing packages..."
       # Install agno and openai together as per docs
       pip install --no-cache-dir -U agno openai==0.28.1
