@@ -1,13 +1,11 @@
-# Core web framework
+# Core dependencies
 fastapi==0.109.2
 uvicorn==0.27.1
-# Don't specify Starlette version as it's a dependency of FastAPI and will be installed automatically
 pydantic==2.5.2
 python-dotenv==1.0.0
 
-# LLM providers
-# agno and openai are installed separately in buildCommand
-anthropic==0.7.7
+# Note: openai, anthropic, and agno are installed separately in the Dockerfile
+# to ensure correct version compatibility
 
 # Content generation tools
 duckduckgo-search==3.9.3
