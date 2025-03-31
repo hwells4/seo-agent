@@ -28,9 +28,9 @@ ENV PORT=8000
 # Expose the port
 EXPOSE 8000
 
-# Health check with more lenient settings
-HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=5 \
+# Health check using the minimal server
+HEALTHCHECK --interval=10s --timeout=5s --start-period=10s --retries=3 \
     CMD curl -f http://localhost:8000/api/v1/health || exit 1
 
-# Run the application with workers
-CMD ["python3", "-m", "uvicorn", "api.base:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
+# Run the minimal server for health checks during startup
+CMD ["python3", "-m", "uvicorn", "minimal_server:app", "--host", "0.0.0.0", "--port", "8000"]
