@@ -1,0 +1,187 @@
+{
+    "session_id": "15e46f8a-3420-412f-ad62-1b613e712a81",
+    "user_id": null,
+    "team_session_id": "690bd86d-0ce6-4b61-8560-6315ae834d93",
+    "memory": {
+        "update_system_message_on_change": false,
+        "create_session_summary": false,
+        "update_session_summary_after_run": true,
+        "create_user_memories": false,
+        "update_user_memories_after_run": true,
+        "messages": [
+            {
+                "content": "<your_role>\nSecond test agent\n</your_role>\n\n<instructions>\n\nYou are Agent2, a helpful assistant.\nRespond to all queries with useful information.\nAlways provide a different perspective from other agents.\n\n</instructions>",
+                "from_history": false,
+                "stop_after_tool_call": false,
+                "role": "system",
+                "created_at": 1743388252
+            },
+            {
+                "content": "You are a member of a team of agents. Your goal is to complete the following task:\n\nFind the capital of France.\n\n<expected_output>\nThe capital of France is Paris.\n</expected_output>",
+                "from_history": false,
+                "stop_after_tool_call": false,
+                "role": "user",
+                "created_at": 1743388252
+            },
+            {
+                "content": "The capital of France is Paris. It is known for its iconic landmarks such as the Eiffel Tower, Louvre Museum, and Notre-Dame Cathedral.",
+                "from_history": false,
+                "stop_after_tool_call": false,
+                "role": "assistant",
+                "metrics": {
+                    "input_tokens": 95,
+                    "output_tokens": 33,
+                    "total_tokens": 128,
+                    "prompt_tokens": 95,
+                    "completion_tokens": 33,
+                    "prompt_tokens_details": {
+                        "audio_tokens": 0,
+                        "cached_tokens": 0
+                    },
+                    "completion_tokens_details": {
+                        "accepted_prediction_tokens": 0,
+                        "audio_tokens": 0,
+                        "reasoning_tokens": 0,
+                        "rejected_prediction_tokens": 0
+                    },
+                    "time": 0.5966683750157245
+                },
+                "created_at": 1743388252
+            }
+        ],
+        "runs": [
+            {
+                "message": {
+                    "content": "You are a member of a team of agents. Your goal is to complete the following task:\n\nFind the capital of France.\n\n<expected_output>\nThe capital of France is Paris.\n</expected_output>",
+                    "from_history": false,
+                    "stop_after_tool_call": false,
+                    "role": "user",
+                    "created_at": 1743388252
+                },
+                "response": {
+                    "content": "The capital of France is Paris. It is known for its iconic landmarks such as the Eiffel Tower, Louvre Museum, and Notre-Dame Cathedral.",
+                    "content_type": "str",
+                    "event": "RunResponse",
+                    "metrics": {
+                        "input_tokens": [
+                            95
+                        ],
+                        "output_tokens": [
+                            33
+                        ],
+                        "total_tokens": [
+                            128
+                        ],
+                        "prompt_tokens": [
+                            95
+                        ],
+                        "completion_tokens": [
+                            33
+                        ],
+                        "prompt_tokens_details": [
+                            {
+                                "audio_tokens": 0,
+                                "cached_tokens": 0
+                            }
+                        ],
+                        "completion_tokens_details": [
+                            {
+                                "accepted_prediction_tokens": 0,
+                                "audio_tokens": 0,
+                                "reasoning_tokens": 0,
+                                "rejected_prediction_tokens": 0
+                            }
+                        ],
+                        "time": [
+                            0.5966683750157245
+                        ]
+                    },
+                    "model": "gpt-3.5-turbo-1106",
+                    "run_id": "4943027e-a971-42ce-9510-8b62b37e9ab1",
+                    "agent_id": "1e5bb3e6-740c-4d1d-a52e-399587d15edc",
+                    "session_id": "15e46f8a-3420-412f-ad62-1b613e712a81",
+                    "tools": [],
+                    "created_at": 1743388250,
+                    "messages": [
+                        {
+                            "content": "<your_role>\nSecond test agent\n</your_role>\n\n<instructions>\n\nYou are Agent2, a helpful assistant.\nRespond to all queries with useful information.\nAlways provide a different perspective from other agents.\n\n</instructions>",
+                            "from_history": false,
+                            "stop_after_tool_call": false,
+                            "role": "system",
+                            "created_at": 1743388252
+                        },
+                        {
+                            "content": "You are a member of a team of agents. Your goal is to complete the following task:\n\nFind the capital of France.\n\n<expected_output>\nThe capital of France is Paris.\n</expected_output>",
+                            "from_history": false,
+                            "stop_after_tool_call": false,
+                            "role": "user",
+                            "created_at": 1743388252
+                        },
+                        {
+                            "content": "The capital of France is Paris. It is known for its iconic landmarks such as the Eiffel Tower, Louvre Museum, and Notre-Dame Cathedral.",
+                            "from_history": false,
+                            "stop_after_tool_call": false,
+                            "role": "assistant",
+                            "metrics": {
+                                "input_tokens": 95,
+                                "output_tokens": 33,
+                                "total_tokens": 128,
+                                "prompt_tokens": 95,
+                                "completion_tokens": 33,
+                                "prompt_tokens_details": {
+                                    "audio_tokens": 0,
+                                    "cached_tokens": 0
+                                },
+                                "completion_tokens_details": {
+                                    "accepted_prediction_tokens": 0,
+                                    "audio_tokens": 0,
+                                    "reasoning_tokens": 0,
+                                    "rejected_prediction_tokens": 0
+                                },
+                                "time": 0.5966683750157245
+                            },
+                            "created_at": 1743388252
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "session_data": {
+        "session_metrics": {
+            "input_tokens": 95,
+            "output_tokens": 33,
+            "total_tokens": 128,
+            "prompt_tokens": 95,
+            "completion_tokens": 33,
+            "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 0
+            },
+            "completion_tokens_details": {
+                "accepted_prediction_tokens": 0,
+                "audio_tokens": 0,
+                "reasoning_tokens": 0,
+                "rejected_prediction_tokens": 0
+            },
+            "additional_metrics": null,
+            "time": 0.5966683750157245,
+            "time_to_first_token": null,
+            "timer": null
+        }
+    },
+    "extra_data": null,
+    "created_at": 1743388253,
+    "updated_at": 1743388253,
+    "agent_id": "1e5bb3e6-740c-4d1d-a52e-399587d15edc",
+    "agent_data": {
+        "name": "Agent2",
+        "agent_id": "1e5bb3e6-740c-4d1d-a52e-399587d15edc",
+        "model": {
+            "id": "gpt-3.5-turbo-1106",
+            "name": "OpenAIChat",
+            "provider": "OpenAI",
+            "response_format": "None"
+        }
+    }
+}

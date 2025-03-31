@@ -2,19 +2,30 @@
 """
 Mini test for Content Creation Team with shortened responses
 This is designed to test the system with minimal token usage by:
-1. Using system mocking for non-critical components
+1. Running each agent individually like in the working integration test
 2. Limiting max tokens for all responses
 3. Using shorter test prompts
 """
 
 import os
+import sys
 import logging
 import json
 import datetime
 import re
 from dotenv import load_dotenv
 
-from content_creation_team import create_content_team, extract_gap_analysis
+# Add parent directory to path so we can import the content_creation_team module
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+from content_creation_team import create_facts_prompt, extract_gap_analysis
+
+# Import Agno components directly
+from agno.agent import Agent
+from agno.models.openai import OpenAIChat
+from agno.models.anthropic import Claude
+from agno.models.deepseek import DeepSeek
+from agno.models.xai import xAI
+from agno.tools.duckduckgo import DuckDuckGoTools
 
 # Load environment variables
 load_dotenv()
@@ -48,8 +59,8 @@ def check_api_keys():
     
     return True
 
-def test_content_creation_mini():
-    """Run a minimal test of the content creation team with short outputs
+def test_run_mini_agents():
+    """Run a minimal test using individual agents with the run() method
     
     This test is designed to use minimal tokens while still testing the full
     system integration. It uses:
@@ -63,51 +74,131 @@ def test_content_creation_mini():
             logger.error("Missing API keys. Please set all required API keys in .env file.")
             return
         
-        logger.info("Running mini test of content creation team")
+        logger.info("Running mini test with individual agents")
         
-        # Simplified brand voice to reduce tokens
-        brand_voice = {
-            "tone": "Conversational but professional",
-            "style": "Direct and practical",
-            "taboo_words": ["obviously", "simply", "just", "clearly"]
-        }
-        
-        # Create the team
-        team = create_content_team(brand_voice)
-        
-        # Override model max tokens to limit response sizes (optional)
-        for member in team.members:
-            # If the model has a max_tokens parameter, set it low
-            if hasattr(member.model, 'max_tokens'):
-                member.model.max_tokens = 300
+        # Get API keys
+        openai_api_key = os.getenv("OPENAI_API_KEY")
+        anthropic_api_key = os.getenv("ANTHROPIC_API_KEY")
+        deepseek_api_key = os.getenv("DEEPSEEK_API_KEY")
+        xai_api_key = os.getenv("XAI_API_KEY")
         
         # Simple topic that won't require extensive research
         topic = "desk organization mini test"
-        
         logger.info(f"Starting mini test with topic: {topic}")
         
-        # Use a shorter, more focused request
-        result = team.print_response(
-            message=f"Create a 150-word outline about {topic}. Keep all responses concise.",
-            stream=True,
-            stream_intermediate_steps=True
+        # Step 1: Research with O3Mini (shortened)
+        logger.info("Step 1: Running Research Engine (O3Mini)")
+        research_agent = Agent(
+            name="Research Engine",
+            model=OpenAIChat(id="gpt-3.5-turbo-1106", api_key=openai_api_key, max_tokens=300),
+            tools=[DuckDuckGoTools()],
         )
         
-        # Save the mini test results to a file
+        research_prompt = f"Analyze content structure and trends for '{topic}' in 200 words or less"
+        research_output = research_agent.run(research_prompt)
+        logger.info(f"Research output received ({len(research_output.content)} chars)")
+        
+        # Step 2: Brief creation with DeepSeek (shortened)
+        logger.info("Step 2: Running Brief Creator (DeepSeek)")
+        brief_agent = Agent(
+            name="Brief Creator",
+            model=DeepSeek(id="deepseek-chat", api_key=deepseek_api_key),
+        )
+        
+        brief_prompt = f"""
+        You are a content strategy specialist. Based on the following research, create a brief content outline 
+        with a focus on identifying content gaps:
+        
+        {research_output.content}
+        
+        Include a section clearly labeled "Gap Analysis" that identifies 2-3 content opportunities 
+        competitors are missing. Keep your response under 300 words.
+        """
+        
+        brief_output = brief_agent.run(brief_prompt)
+        logger.info(f"Brief output received ({len(brief_output.content)} chars)")
+        
+        # Extract gap analysis for facts collection
+        gap_analysis = extract_gap_analysis(brief_output.content)
+        logger.info(f"Gap Analysis extracted ({len(gap_analysis)} chars)")
+        
+        # Step 3: Facts collection with Grok (shortened)
+        logger.info("Step 3: Running Facts Collector (Grok/xAI)")
+        
+        # Create a structured prompt for Grok
+        facts_prompt = create_facts_prompt(topic, gap_analysis)
+        
+        facts_agent = Agent(
+            name="Facts Collector",
+            model=xAI(id="grok-beta", api_key=xai_api_key, base_url="https://api.x.ai/v1"),
+            tools=[DuckDuckGoTools()],
+        )
+        
+        # Add a length constraint to the prompt
+        facts_prompt += "\n\nKeep your response concise, with 3-5 stats and 2-3 social insights at most."
+        
+        facts_output = facts_agent.run(facts_prompt)
+        logger.info(f"Facts output received ({len(facts_output.content)} chars)")
+        
+        # Step 4: Content creation with Claude (shortened)
+        logger.info("Step 4: Running Content Creator (Claude)")
+        
+        content_agent = Agent(
+            name="Content Creator",
+            model=Claude(id="claude-3-sonnet-20240229", api_key=anthropic_api_key, max_tokens=500),
+        )
+        
+        content_prompt = f"""
+        Create a 150-word outline about {topic} based on:
+        
+        RESEARCH:
+        {research_output.content[:1000]}...
+        
+        CONTENT BRIEF:
+        {brief_output.content[:1000]}...
+        
+        FACTS AND STATISTICS:
+        {facts_output.content[:1000]}...
+        
+        The content should be concise and practical. Focus on an outline only.
+        """
+        
+        content_output = content_agent.run(content_prompt)
+        logger.info(f"Content output received ({len(content_output.content)} chars)")
+        
+        # Save all steps to a file
+        results = {
+            "topic": topic,
+            "steps": {
+                "research": {
+                    "prompt": research_prompt,
+                    "output": research_output.content
+                },
+                "brief": {
+                    "prompt": brief_prompt,
+                    "output": brief_output.content,
+                    "extracted_gap_analysis": gap_analysis
+                },
+                "facts": {
+                    "prompt": facts_prompt,
+                    "output": facts_output.content
+                },
+                "content": {
+                    "prompt": content_prompt,
+                    "output": content_output.content
+                }
+            }
+        }
+        
+        # Save results to a file
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"mini_test_results_{timestamp}.json"
         
         with open(filename, "w") as f:
-            result_data = {
-                "topic": topic,
-                "content": result if isinstance(result, str) else str(result),
-                "timestamp": timestamp,
-                "test_type": "mini"
-            }
-            json.dump(result_data, f, indent=2)
+            json.dump(results, f, indent=2)
         
         logger.info(f"Mini test results saved to {filename}")
-        return result
+        return results
     
     except Exception as e:
         logger.exception(f"Error in mini test: {str(e)}")
@@ -161,16 +252,16 @@ def test_gap_analysis_extraction():
     logger.info("Gap analysis extraction tests complete")
 
 if __name__ == "__main__":
-    print("Running mini tests for content creation team")
-    print("--------------------------------------------")
+    print("Running mini tests for content creation pipeline")
+    print("-----------------------------------------------")
     
     # Test gap analysis extraction
     test_gap_analysis_extraction()
     
-    # Run mini content creation test
-    result = test_content_creation_mini()
+    # Run mini agent test - this matches the approach in test_integration_agno.py
+    results = test_run_mini_agents()
     
-    if result:
+    if results:
         print("\nMini test completed successfully!")
     else:
         print("\nMini test failed.") 

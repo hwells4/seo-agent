@@ -63,7 +63,9 @@ def create_facts_prompt(topic, gap_analysis=None):
 ---END GAP ANALYSIS---
 """
 
-    prompt += """Return the response in JSON format with fields: 'stats' (list of facts with sources and dates), 'social_insights' (list of trends with platform, sentiment, and examples), and 'summary' (text tying it to the keyword and SEO goals)."""
+    prompt += """Return the response in JSON format with fields: 'stats' (list of facts with sources and dates), 'social_insights' (list of trends with platform, sentiment, and examples), and 'summary' (text tying it to the keyword and SEO goals).
+
+Keep your response concise, with 3-5 stats and 2-3 social insights at most."""
 
     return prompt
 
@@ -314,15 +316,124 @@ def create_content_team(brand_voice=None):
         success_criteria="High-quality, comprehensive content that follows the brief and incorporates all necessary facts and figures",
         debug_mode=True,
         show_members_responses=True,
-        send_team_context_to_members=True,
+        share_member_interactions=True,  # Updated from send_team_context_to_members
         markdown=True
     )
     
     logger.info("Content creation team initialized")
-    return content_team
+    return (research_agent, brief_agent, facts_agent, content_agent)
+
+def run_content_pipeline(topic, brand_voice=None, word_count=500, save_results=True):
+    """Run the content creation pipeline using individual agents rather than a Team.
+    
+    Args:
+        topic (str): The topic for content creation
+        brand_voice (dict, optional): Dictionary containing brand voice parameters
+        word_count (int, optional): Target word count for the content
+        save_results (bool, optional): Whether to save the results to a JSON file
+        
+    Returns:
+        dict: Results of the content creation pipeline
+    """
+    logger.info(f"Starting content creation pipeline for topic: {topic}")
+    
+    # Initialize all agents
+    research_agent, brief_agent, facts_agent, content_agent = create_content_team(brand_voice)
+    
+    results = {
+        "topic": topic,
+        "steps": {}
+    }
+    
+    # Step 1: Research topic
+    logger.info("Step 1: Running Research Engine")
+    research_prompt = f"Analyze content structure and trends for '{topic}' in 200 words or less"
+    research_response = research_agent.run(research_prompt)
+    research_result = research_response.content if hasattr(research_response, 'content') else str(research_response)
+    results["steps"]["research"] = {
+        "prompt": research_prompt,
+        "output": research_result
+    }
+    logger.info(f"Research output received ({len(research_result)} chars)")
+    
+    # Step 2: Create brief based on research
+    logger.info("Step 2: Running Brief Creator")
+    brief_prompt = f"""
+        You are a content strategy specialist. Based on the following research, create a brief content outline 
+        with a focus on identifying content gaps:
+        
+        {research_result}
+        
+        Include a section clearly labeled "Gap Analysis" that identifies 2-3 content opportunities 
+        competitors are missing. Keep your response under 300 words.
+        """
+    brief_response = brief_agent.run(brief_prompt)
+    brief_result = brief_response.content if hasattr(brief_response, 'content') else str(brief_response)
+    
+    # Extract gap analysis
+    gap_analysis = extract_gap_analysis(brief_result)
+    
+    results["steps"]["brief"] = {
+        "prompt": brief_prompt,
+        "output": brief_result,
+        "extracted_gap_analysis": gap_analysis
+    }
+    logger.info(f"Brief output received ({len(brief_result)} chars)")
+    logger.info(f"Gap Analysis extracted ({len(gap_analysis)} chars)")
+    
+    # Step 3: Collect facts
+    logger.info("Step 3: Running Facts Collector")
+    facts_prompt = create_facts_prompt(topic, gap_analysis)
+    
+    # Update the instructions for the facts agent
+    facts_agent.instructions = facts_prompt
+    
+    facts_response = facts_agent.run(facts_prompt)
+    facts_result = facts_response.content if hasattr(facts_response, 'content') else str(facts_response)
+    results["steps"]["facts"] = {
+        "prompt": facts_prompt,
+        "output": facts_result
+    }
+    logger.info(f"Facts output received ({len(facts_result)} chars)")
+    
+    # Step 4: Create content
+    logger.info("Step 4: Running Content Creator")
+    content_prompt = f"""
+        Create a {word_count}-word outline about {topic} based on:
+        
+        RESEARCH:
+        {research_result}
+        
+        CONTENT BRIEF:
+        {brief_result}
+        
+        FACTS AND STATISTICS:
+        {facts_result}
+        
+        The content should be concise and practical. Focus on an outline only.
+        """
+    content_response = content_agent.run(content_prompt)
+    content_result = content_response.content if hasattr(content_response, 'content') else str(content_response)
+    results["steps"]["content"] = {
+        "prompt": content_prompt,
+        "output": content_result
+    }
+    logger.info(f"Content output received ({len(content_result)} chars)")
+    
+    # Save results to a file
+    if save_results:
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"content_results_{timestamp}.json"
+        
+        with open(filename, "w") as f:
+            json.dump(results, f, indent=2)
+        logger.info(f"Content results saved to {filename}")
+    
+    logger.info("Content creation pipeline completed")
+    return results
 
 def main():
-    """Run the content creation team with a test query."""
+    """Run the content creation pipeline with a test query."""
     try:
         # Check if API keys are available
         if not check_api_keys():
@@ -340,36 +451,23 @@ def main():
             "format": "Use headers, bullet points, and numbered lists for scannability. Short paragraphs (2-3 sentences)."
         }
         
-        # Create and run the team with brand voice configuration
-        team = create_content_team(brand_voice)
-        
-        # For testing with a small topic that won't take too long
+        # Topic for testing - small topic that won't take too long
         topic = "desk organization tips"
         
-        logger.info(f"Starting content creation for topic: {topic}")
-        
-        # Run with print_response to see all the steps in the console
-        result = team.print_response(
-            message=f"Create content about {topic}. The content should be helpful, practical, and about 500 words.",
-            stream=True,
-            stream_intermediate_steps=True
+        # Run the content pipeline with individual agents
+        results = run_content_pipeline(
+            topic=topic,
+            brand_voice=brand_voice,
+            word_count=500,
+            save_results=True
         )
         
-        # Save results to a file for reference
-        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"content_results_{timestamp}.json"
-        
-        with open(filename, "w") as f:
-            # Convert result to a serializable format if needed
-            result_data = {
-                "topic": topic,
-                "content": result if isinstance(result, str) else str(result),
-                "timestamp": timestamp
-            }
-            json.dump(result_data, f, indent=2)
-        
-        logger.info(f"Content results saved to {filename}")
-        logger.info("Content creation completed")
+        # Print the final content
+        print("\n\n" + "=" * 50)
+        print(f"FINAL CONTENT FOR: {topic}")
+        print("=" * 50)
+        print(results["steps"]["content"]["output"])
+        print("=" * 50)
         
     except Exception as e:
         logger.exception(f"Error in content creation process: {str(e)}")

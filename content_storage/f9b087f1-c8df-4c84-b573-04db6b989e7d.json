@@ -1,0 +1,644 @@
+{
+    "session_id": "f9b087f1-c8df-4c84-b573-04db6b989e7d",
+    "user_id": null,
+    "team_session_id": null,
+    "memory": {
+        "update_system_message_on_change": false,
+        "create_session_summary": false,
+        "update_session_summary_after_run": true,
+        "create_user_memories": false,
+        "update_user_memories_after_run": true,
+        "messages": [
+            {
+                "content": "<your_role>\nAnalyze content to identify trends and patterns\n</your_role>\n\n<instructions>\n\nYou are a content research specialist.\n\nWhen given a topic:\n1. Search for top-ranking content on this topic\n2. Analyze their structure, style, and coverage\n3. Identify common topics, subtopics, and patterns\n4. Determine content styles that perform well\n5. Provide a comprehensive analysis summary\n\nYour output should be a detailed analysis report that includes:\n- Key topics covered by top-performing content\n- Common content structures and formats\n- Typical tone and style elements\n- Depth of coverage in successful content\n- Notable authority signals used\n\n</instructions>",
+                "from_history": false,
+                "stop_after_tool_call": false,
+                "role": "system",
+                "created_at": 1743394286
+            },
+            {
+                "content": "Analyze content structure and trends for 'desk organization tips' in 200 words or less",
+                "from_history": false,
+                "stop_after_tool_call": false,
+                "role": "user",
+                "created_at": 1743394286
+            },
+            {
+                "from_history": false,
+                "stop_after_tool_call": false,
+                "role": "assistant",
+                "tool_calls": [
+                    {
+                        "id": "call_xYImkJMxXvBMFqCHUkVYSJ9i",
+                        "function": {
+                            "arguments": "{\"query\": \"desk organization tips\", \"max_results\": 5}",
+                            "name": "duckduckgo_search"
+                        },
+                        "type": "function"
+                    },
+                    {
+                        "id": "call_AyM23iH2bCzsqwOPKNioXJW6",
+                        "function": {
+                            "arguments": "{\"query\": \"desk organization tips blog\", \"max_results\": 5}",
+                            "name": "duckduckgo_search"
+                        },
+                        "type": "function"
+                    }
+                ],
+                "metrics": {
+                    "input_tokens": 303,
+                    "output_tokens": 65,
+                    "total_tokens": 368,
+                    "prompt_tokens": 303,
+                    "completion_tokens": 65,
+                    "prompt_tokens_details": {
+                        "audio_tokens": 0,
+                        "cached_tokens": 0
+                    },
+                    "completion_tokens_details": {
+                        "accepted_prediction_tokens": 0,
+                        "audio_tokens": 0,
+                        "reasoning_tokens": 0,
+                        "rejected_prediction_tokens": 0
+                    },
+                    "time": 0.9475604170002043
+                },
+                "created_at": 1743394286
+            },
+            {
+                "content": "DDGS.__init__() got an unexpected keyword argument 'proxy'",
+                "from_history": false,
+                "stop_after_tool_call": false,
+                "role": "tool",
+                "tool_call_id": "call_xYImkJMxXvBMFqCHUkVYSJ9i",
+                "tool_name": "duckduckgo_search",
+                "tool_args": {
+                    "query": "desk organization tips",
+                    "max_results": 5
+                },
+                "tool_call_error": true,
+                "metrics": {
+                    "time": 0.006904082983965054
+                },
+                "created_at": 1743394287
+            },
+            {
+                "content": "DDGS.__init__() got an unexpected keyword argument 'proxy'",
+                "from_history": false,
+                "stop_after_tool_call": false,
+                "role": "tool",
+                "tool_call_id": "call_AyM23iH2bCzsqwOPKNioXJW6",
+                "tool_name": "duckduckgo_search",
+                "tool_args": {
+                    "query": "desk organization tips blog",
+                    "max_results": 5
+                },
+                "tool_call_error": true,
+                "metrics": {
+                    "time": 0.0037336249952204525
+                },
+                "created_at": 1743394287
+            },
+            {
+                "content": "I apologize, but it seems that there was an issue with retrieving the search results. Let me attempt the search again and get back to you shortly.",
+                "from_history": false,
+                "stop_after_tool_call": false,
+                "role": "assistant",
+                "tool_calls": [
+                    {
+                        "id": "call_es5ohujHAr9E6yJQtINL7Szh",
+                        "function": {
+                            "arguments": "{\"query\":\"desk organization tips\",\"max_results\":10}",
+                            "name": "duckduckgo_search"
+                        },
+                        "type": "function"
+                    }
+                ],
+                "metrics": {
+                    "input_tokens": 406,
+                    "output_tokens": 57,
+                    "total_tokens": 463,
+                    "prompt_tokens": 406,
+                    "completion_tokens": 57,
+                    "prompt_tokens_details": {
+                        "audio_tokens": 0,
+                        "cached_tokens": 0
+                    },
+                    "completion_tokens_details": {
+                        "accepted_prediction_tokens": 0,
+                        "audio_tokens": 0,
+                        "reasoning_tokens": 0,
+                        "rejected_prediction_tokens": 0
+                    },
+                    "time": 0.8730306249926798
+                },
+                "created_at": 1743394287
+            },
+            {
+                "content": "DDGS.__init__() got an unexpected keyword argument 'proxy'",
+                "from_history": false,
+                "stop_after_tool_call": false,
+                "role": "tool",
+                "tool_call_id": "call_es5ohujHAr9E6yJQtINL7Szh",
+                "tool_name": "duckduckgo_search",
+                "tool_args": {
+                    "query": "desk organization tips",
+                    "max_results": 10
+                },
+                "tool_call_error": true,
+                "metrics": {
+                    "time": 0.0037812910159118474
+                },
+                "created_at": 1743394288
+            },
+            {
+                "content": "It appears that I'm experiencing technical difficulties in accessing the search results for \"desk organization tips.\" I will work on resolving this issue and get back to you as soon as possible. Thank you for your patience.",
+                "from_history": false,
+                "stop_after_tool_call": false,
+                "role": "assistant",
+                "metrics": {
+                    "input_tokens": 487,
+                    "output_tokens": 44,
+                    "total_tokens": 531,
+                    "prompt_tokens": 487,
+                    "completion_tokens": 44,
+                    "prompt_tokens_details": {
+                        "audio_tokens": 0,
+                        "cached_tokens": 0
+                    },
+                    "completion_tokens_details": {
+                        "accepted_prediction_tokens": 0,
+                        "audio_tokens": 0,
+                        "reasoning_tokens": 0,
+                        "rejected_prediction_tokens": 0
+                    },
+                    "time": 0.664424415997928
+                },
+                "created_at": 1743394288
+            }
+        ],
+        "runs": [
+            {
+                "message": {
+                    "content": "Analyze content structure and trends for 'desk organization tips' in 200 words or less",
+                    "from_history": false,
+                    "stop_after_tool_call": false,
+                    "role": "user",
+                    "created_at": 1743394286
+                },
+                "response": {
+                    "content": "I apologize, but it seems that there was an issue with retrieving the search results. Let me attempt the search again and get back to you shortly.It appears that I'm experiencing technical difficulties in accessing the search results for \"desk organization tips.\" I will work on resolving this issue and get back to you as soon as possible. Thank you for your patience.",
+                    "content_type": "str",
+                    "event": "RunResponse",
+                    "metrics": {
+                        "input_tokens": [
+                            303,
+                            406,
+                            487
+                        ],
+                        "output_tokens": [
+                            65,
+                            57,
+                            44
+                        ],
+                        "total_tokens": [
+                            368,
+                            463,
+                            531
+                        ],
+                        "prompt_tokens": [
+                            303,
+                            406,
+                            487
+                        ],
+                        "completion_tokens": [
+                            65,
+                            57,
+                            44
+                        ],
+                        "prompt_tokens_details": [
+                            {
+                                "audio_tokens": 0,
+                                "cached_tokens": 0
+                            },
+                            {
+                                "audio_tokens": 0,
+                                "cached_tokens": 0
+                            },
+                            {
+                                "audio_tokens": 0,
+                                "cached_tokens": 0
+                            }
+                        ],
+                        "completion_tokens_details": [
+                            {
+                                "accepted_prediction_tokens": 0,
+                                "audio_tokens": 0,
+                                "reasoning_tokens": 0,
+                                "rejected_prediction_tokens": 0
+                            },
+                            {
+                                "accepted_prediction_tokens": 0,
+                                "audio_tokens": 0,
+                                "reasoning_tokens": 0,
+                                "rejected_prediction_tokens": 0
+                            },
+                            {
+                                "accepted_prediction_tokens": 0,
+                                "audio_tokens": 0,
+                                "reasoning_tokens": 0,
+                                "rejected_prediction_tokens": 0
+                            }
+                        ],
+                        "time": [
+                            0.9475604170002043,
+                            0.8730306249926798,
+                            0.664424415997928
+                        ]
+                    },
+                    "model": "gpt-3.5-turbo-1106",
+                    "run_id": "73ec4412-600c-46ff-a912-4c69e2a3a3ef",
+                    "agent_id": "5b48af20-9ffb-48f2-b65b-db4a3d82247b",
+                    "session_id": "f9b087f1-c8df-4c84-b573-04db6b989e7d",
+                    "tools": [
+                        {
+                            "content": "DDGS.__init__() got an unexpected keyword argument 'proxy'",
+                            "tool_call_id": "call_xYImkJMxXvBMFqCHUkVYSJ9i",
+                            "tool_name": "duckduckgo_search",
+                            "tool_args": {
+                                "query": "desk organization tips",
+                                "max_results": 5
+                            },
+                            "tool_call_error": true,
+                            "metrics": {
+                                "input_tokens": 0,
+                                "output_tokens": 0,
+                                "total_tokens": 0,
+                                "prompt_tokens": 0,
+                                "completion_tokens": 0,
+                                "prompt_tokens_details": null,
+                                "completion_tokens_details": null,
+                                "additional_metrics": null,
+                                "time": 0.006904082983965054,
+                                "time_to_first_token": null,
+                                "timer": null
+                            },
+                            "created_at": 1743394287
+                        },
+                        {
+                            "content": "DDGS.__init__() got an unexpected keyword argument 'proxy'",
+                            "tool_call_id": "call_AyM23iH2bCzsqwOPKNioXJW6",
+                            "tool_name": "duckduckgo_search",
+                            "tool_args": {
+                                "query": "desk organization tips blog",
+                                "max_results": 5
+                            },
+                            "tool_call_error": true,
+                            "metrics": {
+                                "input_tokens": 0,
+                                "output_tokens": 0,
+                                "total_tokens": 0,
+                                "prompt_tokens": 0,
+                                "completion_tokens": 0,
+                                "prompt_tokens_details": null,
+                                "completion_tokens_details": null,
+                                "additional_metrics": null,
+                                "time": 0.0037336249952204525,
+                                "time_to_first_token": null,
+                                "timer": null
+                            },
+                            "created_at": 1743394287
+                        },
+                        {
+                            "content": "DDGS.__init__() got an unexpected keyword argument 'proxy'",
+                            "tool_call_id": "call_es5ohujHAr9E6yJQtINL7Szh",
+                            "tool_name": "duckduckgo_search",
+                            "tool_args": {
+                                "query": "desk organization tips",
+                                "max_results": 10
+                            },
+                            "tool_call_error": true,
+                            "metrics": {
+                                "input_tokens": 0,
+                                "output_tokens": 0,
+                                "total_tokens": 0,
+                                "prompt_tokens": 0,
+                                "completion_tokens": 0,
+                                "prompt_tokens_details": null,
+                                "completion_tokens_details": null,
+                                "additional_metrics": null,
+                                "time": 0.0037812910159118474,
+                                "time_to_first_token": null,
+                                "timer": null
+                            },
+                            "created_at": 1743394288
+                        }
+                    ],
+                    "formatted_tool_calls": [
+                        "duckduckgo_search(query=desk organization tips, max_results=5)",
+                        "duckduckgo_search(query=desk organization tips blog, max_results=5)",
+                        "duckduckgo_search(query=desk organization tips, max_results=10)"
+                    ],
+                    "created_at": 1743394286,
+                    "messages": [
+                        {
+                            "content": "<your_role>\nAnalyze content to identify trends and patterns\n</your_role>\n\n<instructions>\n\nYou are a content research specialist.\n\nWhen given a topic:\n1. Search for top-ranking content on this topic\n2. Analyze their structure, style, and coverage\n3. Identify common topics, subtopics, and patterns\n4. Determine content styles that perform well\n5. Provide a comprehensive analysis summary\n\nYour output should be a detailed analysis report that includes:\n- Key topics covered by top-performing content\n- Common content structures and formats\n- Typical tone and style elements\n- Depth of coverage in successful content\n- Notable authority signals used\n\n</instructions>",
+                            "from_history": false,
+                            "stop_after_tool_call": false,
+                            "role": "system",
+                            "created_at": 1743394286
+                        },
+                        {
+                            "content": "Analyze content structure and trends for 'desk organization tips' in 200 words or less",
+                            "from_history": false,
+                            "stop_after_tool_call": false,
+                            "role": "user",
+                            "created_at": 1743394286
+                        },
+                        {
+                            "from_history": false,
+                            "stop_after_tool_call": false,
+                            "role": "assistant",
+                            "tool_calls": [
+                                {
+                                    "id": "call_xYImkJMxXvBMFqCHUkVYSJ9i",
+                                    "function": {
+                                        "arguments": "{\"query\": \"desk organization tips\", \"max_results\": 5}",
+                                        "name": "duckduckgo_search"
+                                    },
+                                    "type": "function"
+                                },
+                                {
+                                    "id": "call_AyM23iH2bCzsqwOPKNioXJW6",
+                                    "function": {
+                                        "arguments": "{\"query\": \"desk organization tips blog\", \"max_results\": 5}",
+                                        "name": "duckduckgo_search"
+                                    },
+                                    "type": "function"
+                                }
+                            ],
+                            "metrics": {
+                                "input_tokens": 303,
+                                "output_tokens": 65,
+                                "total_tokens": 368,
+                                "prompt_tokens": 303,
+                                "completion_tokens": 65,
+                                "prompt_tokens_details": {
+                                    "audio_tokens": 0,
+                                    "cached_tokens": 0
+                                },
+                                "completion_tokens_details": {
+                                    "accepted_prediction_tokens": 0,
+                                    "audio_tokens": 0,
+                                    "reasoning_tokens": 0,
+                                    "rejected_prediction_tokens": 0
+                                },
+                                "time": 0.9475604170002043
+                            },
+                            "created_at": 1743394286
+                        },
+                        {
+                            "content": "DDGS.__init__() got an unexpected keyword argument 'proxy'",
+                            "from_history": false,
+                            "stop_after_tool_call": false,
+                            "role": "tool",
+                            "tool_call_id": "call_xYImkJMxXvBMFqCHUkVYSJ9i",
+                            "tool_name": "duckduckgo_search",
+                            "tool_args": {
+                                "query": "desk organization tips",
+                                "max_results": 5
+                            },
+                            "tool_call_error": true,
+                            "metrics": {
+                                "time": 0.006904082983965054
+                            },
+                            "created_at": 1743394287
+                        },
+                        {
+                            "content": "DDGS.__init__() got an unexpected keyword argument 'proxy'",
+                            "from_history": false,
+                            "stop_after_tool_call": false,
+                            "role": "tool",
+                            "tool_call_id": "call_AyM23iH2bCzsqwOPKNioXJW6",
+                            "tool_name": "duckduckgo_search",
+                            "tool_args": {
+                                "query": "desk organization tips blog",
+                                "max_results": 5
+                            },
+                            "tool_call_error": true,
+                            "metrics": {
+                                "time": 0.0037336249952204525
+                            },
+                            "created_at": 1743394287
+                        },
+                        {
+                            "content": "I apologize, but it seems that there was an issue with retrieving the search results. Let me attempt the search again and get back to you shortly.",
+                            "from_history": false,
+                            "stop_after_tool_call": false,
+                            "role": "assistant",
+                            "tool_calls": [
+                                {
+                                    "id": "call_es5ohujHAr9E6yJQtINL7Szh",
+                                    "function": {
+                                        "arguments": "{\"query\":\"desk organization tips\",\"max_results\":10}",
+                                        "name": "duckduckgo_search"
+                                    },
+                                    "type": "function"
+                                }
+                            ],
+                            "metrics": {
+                                "input_tokens": 406,
+                                "output_tokens": 57,
+                                "total_tokens": 463,
+                                "prompt_tokens": 406,
+                                "completion_tokens": 57,
+                                "prompt_tokens_details": {
+                                    "audio_tokens": 0,
+                                    "cached_tokens": 0
+                                },
+                                "completion_tokens_details": {
+                                    "accepted_prediction_tokens": 0,
+                                    "audio_tokens": 0,
+                                    "reasoning_tokens": 0,
+                                    "rejected_prediction_tokens": 0
+                                },
+                                "time": 0.8730306249926798
+                            },
+                            "created_at": 1743394287
+                        },
+                        {
+                            "content": "DDGS.__init__() got an unexpected keyword argument 'proxy'",
+                            "from_history": false,
+                            "stop_after_tool_call": false,
+                            "role": "tool",
+                            "tool_call_id": "call_es5ohujHAr9E6yJQtINL7Szh",
+                            "tool_name": "duckduckgo_search",
+                            "tool_args": {
+                                "query": "desk organization tips",
+                                "max_results": 10
+                            },
+                            "tool_call_error": true,
+                            "metrics": {
+                                "time": 0.0037812910159118474
+                            },
+                            "created_at": 1743394288
+                        },
+                        {
+                            "content": "It appears that I'm experiencing technical difficulties in accessing the search results for \"desk organization tips.\" I will work on resolving this issue and get back to you as soon as possible. Thank you for your patience.",
+                            "from_history": false,
+                            "stop_after_tool_call": false,
+                            "role": "assistant",
+                            "metrics": {
+                                "input_tokens": 487,
+                                "output_tokens": 44,
+                                "total_tokens": 531,
+                                "prompt_tokens": 487,
+                                "completion_tokens": 44,
+                                "prompt_tokens_details": {
+                                    "audio_tokens": 0,
+                                    "cached_tokens": 0
+                                },
+                                "completion_tokens_details": {
+                                    "accepted_prediction_tokens": 0,
+                                    "audio_tokens": 0,
+                                    "reasoning_tokens": 0,
+                                    "rejected_prediction_tokens": 0
+                                },
+                                "time": 0.664424415997928
+                            },
+                            "created_at": 1743394288
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "session_data": {
+        "session_metrics": {
+            "input_tokens": 1196,
+            "output_tokens": 166,
+            "total_tokens": 1362,
+            "prompt_tokens": 1196,
+            "completion_tokens": 166,
+            "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 0
+            },
+            "completion_tokens_details": {
+                "accepted_prediction_tokens": 0,
+                "audio_tokens": 0,
+                "reasoning_tokens": 0,
+                "rejected_prediction_tokens": 0
+            },
+            "additional_metrics": null,
+            "time": 2.485015457990812,
+            "time_to_first_token": null,
+            "timer": null
+        }
+    },
+    "extra_data": null,
+    "created_at": 1743394289,
+    "updated_at": 1743394289,
+    "agent_id": "5b48af20-9ffb-48f2-b65b-db4a3d82247b",
+    "agent_data": {
+        "name": "Research Engine",
+        "agent_id": "5b48af20-9ffb-48f2-b65b-db4a3d82247b",
+        "model": {
+            "provider": "OpenAI",
+            "id": "gpt-3.5-turbo-1106",
+            "name": "OpenAIChat",
+            "functions": {
+                "duckduckgo_search": {
+                    "name": "duckduckgo_search",
+                    "description": "Use this function to search DuckDuckGo for a query.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "query": {
+                                "type": "string",
+                                "description": "(str) The query to search for."
+                            },
+                            "max_results": {
+                                "type": "number",
+                                "description": "(optional, default=5) The maximum number of results to return."
+                            }
+                        },
+                        "required": [
+                            "query"
+                        ]
+                    }
+                },
+                "duckduckgo_news": {
+                    "name": "duckduckgo_news",
+                    "description": "Use this function to get the latest news from DuckDuckGo.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "query": {
+                                "type": "string",
+                                "description": "(str) The query to search for."
+                            },
+                            "max_results": {
+                                "type": "number",
+                                "description": "(optional, default=5) The maximum number of results to return."
+                            }
+                        },
+                        "required": [
+                            "query"
+                        ]
+                    }
+                }
+            },
+            "response_format": "None",
+            "tools": [
+                {
+                    "type": "function",
+                    "function": {
+                        "name": "duckduckgo_search",
+                        "description": "Use this function to search DuckDuckGo for a query.",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "query": {
+                                    "type": "string",
+                                    "description": "(str) The query to search for."
+                                },
+                                "max_results": {
+                                    "type": "number",
+                                    "description": "(optional, default=5) The maximum number of results to return."
+                                }
+                            },
+                            "required": [
+                                "query"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "function",
+                    "function": {
+                        "name": "duckduckgo_news",
+                        "description": "Use this function to get the latest news from DuckDuckGo.",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "query": {
+                                    "type": "string",
+                                    "description": "(str) The query to search for."
+                                },
+                                "max_results": {
+                                    "type": "number",
+                                    "description": "(optional, default=5) The maximum number of results to return."
+                                }
+                            },
+                            "required": [
+                                "query"
+                            ]
+                        }
+                    }
+                }
+            ],
+            "tool_choice": "auto"
+        }
+    }
+}

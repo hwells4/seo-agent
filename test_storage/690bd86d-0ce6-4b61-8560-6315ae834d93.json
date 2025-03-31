@@ -1,0 +1,649 @@
+{
+    "session_id": "690bd86d-0ce6-4b61-8560-6315ae834d93",
+    "team_session_id": null,
+    "team_id": "2a95e98a-676f-452e-aac3-b025ed860c9f",
+    "user_id": null,
+    "memory": {
+        "update_system_message_on_change": true,
+        "create_user_memories": false,
+        "update_user_memories_after_run": true,
+        "messages": [
+            {
+                "content": "You are the leader of a team of AI Agents and possible Sub-Teams:\n - Agent 1:\n   - Name: Agent1\n   - Role: First test agent\n - Agent 2:\n   - Name: Agent2\n   - Role: Second test agent\n\n- You can either respond directly or transfer tasks to other Agents in your team depending on the tools available to them and their roles.\n- If you transfer a task to another Agent, make sure to include:\n  - agent_name (str): The name of the Agent to transfer the task to.\n  - task_description (str): A clear description of the task.\n  - expected_output (str): The expected output.\n- You can pass tasks to multiple members at once.\n- You must always validate the output of the other Agents before responding to the user.\n- Evaluate the response from other agents. If you feel the task has been completed, you can stop and respond to the user.\n- You can re-assign the task if you are not satisfied with the result.\n\nYour name is: Test Team.\n\n<success_criteria>\nThe team will be considered successful if the following criteria are met: Task has been completed with input from all relevant team members.\nStop the team run when the criteria are met.\n</success_criteria>\n\n<instructions>\n- You are a team coordinator.\n- Break down tasks and delegate to appropriate team members.\n- Synthesize responses into a cohesive answer.\n</instructions>",
+                "from_history": false,
+                "stop_after_tool_call": false,
+                "role": "system",
+                "created_at": 1743388250
+            },
+            {
+                "content": "What's the capital of France?",
+                "from_history": false,
+                "stop_after_tool_call": false,
+                "role": "user",
+                "created_at": 1743388250
+            },
+            {
+                "from_history": false,
+                "stop_after_tool_call": false,
+                "role": "assistant",
+                "tool_calls": [
+                    {
+                        "id": "call_YB1ZsiN4IGtasWKhfzWCBZds",
+                        "function": {
+                            "arguments": "{\"agent_name\": \"Agent1\", \"task_description\": \"Find the capital of France.\", \"expected_output\": \"The capital of France is Paris.\"}",
+                            "name": "transfer_task_to_member"
+                        },
+                        "type": "function"
+                    },
+                    {
+                        "id": "call_xzsaHV6u9ma25JBa7WwwnnPA",
+                        "function": {
+                            "arguments": "{\"agent_name\": \"Agent2\", \"task_description\": \"Find the capital of France.\", \"expected_output\": \"The capital of France is Paris.\"}",
+                            "name": "transfer_task_to_member"
+                        },
+                        "type": "function"
+                    }
+                ],
+                "metrics": {
+                    "input_tokens": 429,
+                    "output_tokens": 92,
+                    "total_tokens": 521,
+                    "prompt_tokens": 429,
+                    "completion_tokens": 92,
+                    "prompt_tokens_details": {
+                        "audio_tokens": 0,
+                        "cached_tokens": 0
+                    },
+                    "completion_tokens_details": {
+                        "accepted_prediction_tokens": 0,
+                        "audio_tokens": 0,
+                        "reasoning_tokens": 0,
+                        "rejected_prediction_tokens": 0
+                    },
+                    "time": 1.6207927920040675
+                },
+                "created_at": 1743388250
+            },
+            {
+                "content": "The capital of France is Paris.",
+                "from_history": false,
+                "stop_after_tool_call": false,
+                "role": "tool",
+                "tool_call_id": "call_YB1ZsiN4IGtasWKhfzWCBZds",
+                "tool_name": "transfer_task_to_member",
+                "tool_args": {
+                    "agent_name": "Agent1",
+                    "task_description": "Find the capital of France.",
+                    "expected_output": "The capital of France is Paris."
+                },
+                "tool_call_error": false,
+                "metrics": {
+                    "time": 0.0006228330021258444
+                },
+                "created_at": 1743388252
+            },
+            {
+                "content": "The capital of France is Paris. It is known for its iconic landmarks such as the Eiffel Tower, Louvre Museum, and Notre-Dame Cathedral.",
+                "from_history": false,
+                "stop_after_tool_call": false,
+                "role": "tool",
+                "tool_call_id": "call_xzsaHV6u9ma25JBa7WwwnnPA",
+                "tool_name": "transfer_task_to_member",
+                "tool_args": {
+                    "agent_name": "Agent2",
+                    "task_description": "Find the capital of France.",
+                    "expected_output": "The capital of France is Paris."
+                },
+                "tool_call_error": false,
+                "metrics": {
+                    "time": 0.0003733330231625587
+                },
+                "created_at": 1743388253
+            },
+            {
+                "content": "Both Agent1 and Agent2 have confirmed that the capital of France is Paris, known for its iconic landmarks such as the Eiffel Tower, Louvre Museum, and Notre-Dame Cathedral. Therefore, the task has been successfully completed.",
+                "from_history": false,
+                "stop_after_tool_call": false,
+                "role": "assistant",
+                "metrics": {
+                    "input_tokens": 571,
+                    "output_tokens": 50,
+                    "total_tokens": 621,
+                    "prompt_tokens": 571,
+                    "completion_tokens": 50,
+                    "prompt_tokens_details": {
+                        "audio_tokens": 0,
+                        "cached_tokens": 0
+                    },
+                    "completion_tokens_details": {
+                        "accepted_prediction_tokens": 0,
+                        "audio_tokens": 0,
+                        "reasoning_tokens": 0,
+                        "rejected_prediction_tokens": 0
+                    },
+                    "time": 1.03317804200924
+                },
+                "created_at": 1743388253
+            }
+        ],
+        "runs": [
+            {
+                "message": {
+                    "content": "What's the capital of France?",
+                    "from_history": false,
+                    "stop_after_tool_call": false,
+                    "role": "user",
+                    "created_at": 1743388250
+                },
+                "member_responses": null,
+                "response": {
+                    "event": "RunResponse",
+                    "content": "Both Agent1 and Agent2 have confirmed that the capital of France is Paris, known for its iconic landmarks such as the Eiffel Tower, Louvre Museum, and Notre-Dame Cathedral. Therefore, the task has been successfully completed.",
+                    "content_type": "str",
+                    "metrics": {
+                        "input_tokens": [
+                            429,
+                            571
+                        ],
+                        "output_tokens": [
+                            92,
+                            50
+                        ],
+                        "total_tokens": [
+                            521,
+                            621
+                        ],
+                        "prompt_tokens": [
+                            429,
+                            571
+                        ],
+                        "completion_tokens": [
+                            92,
+                            50
+                        ],
+                        "prompt_tokens_details": [
+                            {
+                                "audio_tokens": 0,
+                                "cached_tokens": 0
+                            },
+                            {
+                                "audio_tokens": 0,
+                                "cached_tokens": 0
+                            }
+                        ],
+                        "completion_tokens_details": [
+                            {
+                                "accepted_prediction_tokens": 0,
+                                "audio_tokens": 0,
+                                "reasoning_tokens": 0,
+                                "rejected_prediction_tokens": 0
+                            },
+                            {
+                                "accepted_prediction_tokens": 0,
+                                "audio_tokens": 0,
+                                "reasoning_tokens": 0,
+                                "rejected_prediction_tokens": 0
+                            }
+                        ],
+                        "time": [
+                            1.6207927920040675,
+                            1.03317804200924
+                        ]
+                    },
+                    "model": "gpt-3.5-turbo-1106",
+                    "member_responses": [
+                        {
+                            "content": "The capital of France is Paris.",
+                            "content_type": "str",
+                            "event": "RunResponse",
+                            "metrics": {
+                                "input_tokens": [
+                                    93
+                                ],
+                                "output_tokens": [
+                                    8
+                                ],
+                                "total_tokens": [
+                                    101
+                                ],
+                                "prompt_tokens": [
+                                    93
+                                ],
+                                "completion_tokens": [
+                                    8
+                                ],
+                                "prompt_tokens_details": [
+                                    {
+                                        "audio_tokens": 0,
+                                        "cached_tokens": 0
+                                    }
+                                ],
+                                "completion_tokens_details": [
+                                    {
+                                        "accepted_prediction_tokens": 0,
+                                        "audio_tokens": 0,
+                                        "reasoning_tokens": 0,
+                                        "rejected_prediction_tokens": 0
+                                    }
+                                ],
+                                "time": [
+                                    0.3849482089863159
+                                ]
+                            },
+                            "model": "gpt-3.5-turbo-1106",
+                            "run_id": "99db32a0-e1cd-473d-8b09-43e01c05f393",
+                            "agent_id": "0c1b6358-6235-4e34-a9f3-1fb8921b040d",
+                            "session_id": "50230680-7d4d-4b56-9e18-c507e28db084",
+                            "tools": [],
+                            "created_at": 1743388250,
+                            "messages": [
+                                {
+                                    "content": "<your_role>\nFirst test agent\n</your_role>\n\n<instructions>\n\nYou are Agent1, a helpful assistant.\nRespond to all queries with useful information.\nKeep your responses concise and clear.\n\n</instructions>",
+                                    "from_history": false,
+                                    "stop_after_tool_call": false,
+                                    "role": "system",
+                                    "created_at": 1743388252
+                                },
+                                {
+                                    "content": "You are a member of a team of agents. Your goal is to complete the following task:\n\nFind the capital of France.\n\n<expected_output>\nThe capital of France is Paris.\n</expected_output>",
+                                    "from_history": false,
+                                    "stop_after_tool_call": false,
+                                    "role": "user",
+                                    "created_at": 1743388252
+                                },
+                                {
+                                    "content": "The capital of France is Paris.",
+                                    "from_history": false,
+                                    "stop_after_tool_call": false,
+                                    "role": "assistant",
+                                    "metrics": {
+                                        "input_tokens": 93,
+                                        "output_tokens": 8,
+                                        "total_tokens": 101,
+                                        "prompt_tokens": 93,
+                                        "completion_tokens": 8,
+                                        "prompt_tokens_details": {
+                                            "audio_tokens": 0,
+                                            "cached_tokens": 0
+                                        },
+                                        "completion_tokens_details": {
+                                            "accepted_prediction_tokens": 0,
+                                            "audio_tokens": 0,
+                                            "reasoning_tokens": 0,
+                                            "rejected_prediction_tokens": 0
+                                        },
+                                        "time": 0.3849482089863159
+                                    },
+                                    "created_at": 1743388252
+                                }
+                            ]
+                        },
+                        {
+                            "content": "The capital of France is Paris. It is known for its iconic landmarks such as the Eiffel Tower, Louvre Museum, and Notre-Dame Cathedral.",
+                            "content_type": "str",
+                            "event": "RunResponse",
+                            "metrics": {
+                                "input_tokens": [
+                                    95
+                                ],
+                                "output_tokens": [
+                                    33
+                                ],
+                                "total_tokens": [
+                                    128
+                                ],
+                                "prompt_tokens": [
+                                    95
+                                ],
+                                "completion_tokens": [
+                                    33
+                                ],
+                                "prompt_tokens_details": [
+                                    {
+                                        "audio_tokens": 0,
+                                        "cached_tokens": 0
+                                    }
+                                ],
+                                "completion_tokens_details": [
+                                    {
+                                        "accepted_prediction_tokens": 0,
+                                        "audio_tokens": 0,
+                                        "reasoning_tokens": 0,
+                                        "rejected_prediction_tokens": 0
+                                    }
+                                ],
+                                "time": [
+                                    0.5966683750157245
+                                ]
+                            },
+                            "model": "gpt-3.5-turbo-1106",
+                            "run_id": "4943027e-a971-42ce-9510-8b62b37e9ab1",
+                            "agent_id": "1e5bb3e6-740c-4d1d-a52e-399587d15edc",
+                            "session_id": "15e46f8a-3420-412f-ad62-1b613e712a81",
+                            "tools": [],
+                            "created_at": 1743388250,
+                            "messages": [
+                                {
+                                    "content": "<your_role>\nSecond test agent\n</your_role>\n\n<instructions>\n\nYou are Agent2, a helpful assistant.\nRespond to all queries with useful information.\nAlways provide a different perspective from other agents.\n\n</instructions>",
+                                    "from_history": false,
+                                    "stop_after_tool_call": false,
+                                    "role": "system",
+                                    "created_at": 1743388252
+                                },
+                                {
+                                    "content": "You are a member of a team of agents. Your goal is to complete the following task:\n\nFind the capital of France.\n\n<expected_output>\nThe capital of France is Paris.\n</expected_output>",
+                                    "from_history": false,
+                                    "stop_after_tool_call": false,
+                                    "role": "user",
+                                    "created_at": 1743388252
+                                },
+                                {
+                                    "content": "The capital of France is Paris. It is known for its iconic landmarks such as the Eiffel Tower, Louvre Museum, and Notre-Dame Cathedral.",
+                                    "from_history": false,
+                                    "stop_after_tool_call": false,
+                                    "role": "assistant",
+                                    "metrics": {
+                                        "input_tokens": 95,
+                                        "output_tokens": 33,
+                                        "total_tokens": 128,
+                                        "prompt_tokens": 95,
+                                        "completion_tokens": 33,
+                                        "prompt_tokens_details": {
+                                            "audio_tokens": 0,
+                                            "cached_tokens": 0
+                                        },
+                                        "completion_tokens_details": {
+                                            "accepted_prediction_tokens": 0,
+                                            "audio_tokens": 0,
+                                            "reasoning_tokens": 0,
+                                            "rejected_prediction_tokens": 0
+                                        },
+                                        "time": 0.5966683750157245
+                                    },
+                                    "created_at": 1743388252
+                                }
+                            ]
+                        }
+                    ],
+                    "run_id": "d72e382e-9de3-4cee-aee9-f217e05961d7",
+                    "team_id": "2a95e98a-676f-452e-aac3-b025ed860c9f",
+                    "session_id": "690bd86d-0ce6-4b61-8560-6315ae834d93",
+                    "tools": [
+                        {
+                            "content": "The capital of France is Paris.",
+                            "tool_call_id": "call_YB1ZsiN4IGtasWKhfzWCBZds",
+                            "tool_name": "transfer_task_to_member",
+                            "tool_args": {
+                                "agent_name": "Agent1",
+                                "task_description": "Find the capital of France.",
+                                "expected_output": "The capital of France is Paris."
+                            },
+                            "tool_call_error": false,
+                            "metrics": {
+                                "input_tokens": 0,
+                                "output_tokens": 0,
+                                "total_tokens": 0,
+                                "prompt_tokens": 0,
+                                "completion_tokens": 0,
+                                "prompt_tokens_details": null,
+                                "completion_tokens_details": null,
+                                "additional_metrics": null,
+                                "time": 0.0006228330021258444,
+                                "time_to_first_token": null,
+                                "timer": null
+                            },
+                            "created_at": 1743388252
+                        },
+                        {
+                            "content": "The capital of France is Paris. It is known for its iconic landmarks such as the Eiffel Tower, Louvre Museum, and Notre-Dame Cathedral.",
+                            "tool_call_id": "call_xzsaHV6u9ma25JBa7WwwnnPA",
+                            "tool_name": "transfer_task_to_member",
+                            "tool_args": {
+                                "agent_name": "Agent2",
+                                "task_description": "Find the capital of France.",
+                                "expected_output": "The capital of France is Paris."
+                            },
+                            "tool_call_error": false,
+                            "metrics": {
+                                "input_tokens": 0,
+                                "output_tokens": 0,
+                                "total_tokens": 0,
+                                "prompt_tokens": 0,
+                                "completion_tokens": 0,
+                                "prompt_tokens_details": null,
+                                "completion_tokens_details": null,
+                                "additional_metrics": null,
+                                "time": 0.0003733330231625587,
+                                "time_to_first_token": null,
+                                "timer": null
+                            },
+                            "created_at": 1743388253
+                        }
+                    ],
+                    "formatted_tool_calls": [
+                        "transfer_task_to_member(agent_name=Agent1, task_description=Find the capital of France., expected_output=The capital of France is Paris.)",
+                        "transfer_task_to_member(agent_name=Agent2, task_description=Find the capital of France., expected_output=The capital of France is Paris.)"
+                    ],
+                    "created_at": 1743388250,
+                    "messages": [
+                        {
+                            "content": "You are the leader of a team of AI Agents and possible Sub-Teams:\n - Agent 1:\n   - Name: Agent1\n   - Role: First test agent\n - Agent 2:\n   - Name: Agent2\n   - Role: Second test agent\n\n- You can either respond directly or transfer tasks to other Agents in your team depending on the tools available to them and their roles.\n- If you transfer a task to another Agent, make sure to include:\n  - agent_name (str): The name of the Agent to transfer the task to.\n  - task_description (str): A clear description of the task.\n  - expected_output (str): The expected output.\n- You can pass tasks to multiple members at once.\n- You must always validate the output of the other Agents before responding to the user.\n- Evaluate the response from other agents. If you feel the task has been completed, you can stop and respond to the user.\n- You can re-assign the task if you are not satisfied with the result.\n\nYour name is: Test Team.\n\n<success_criteria>\nThe team will be considered successful if the following criteria are met: Task has been completed with input from all relevant team members.\nStop the team run when the criteria are met.\n</success_criteria>\n\n<instructions>\n- You are a team coordinator.\n- Break down tasks and delegate to appropriate team members.\n- Synthesize responses into a cohesive answer.\n</instructions>",
+                            "from_history": false,
+                            "stop_after_tool_call": false,
+                            "role": "system",
+                            "created_at": 1743388250
+                        },
+                        {
+                            "content": "What's the capital of France?",
+                            "from_history": false,
+                            "stop_after_tool_call": false,
+                            "role": "user",
+                            "created_at": 1743388250
+                        },
+                        {
+                            "from_history": false,
+                            "stop_after_tool_call": false,
+                            "role": "assistant",
+                            "tool_calls": [
+                                {
+                                    "id": "call_YB1ZsiN4IGtasWKhfzWCBZds",
+                                    "function": {
+                                        "arguments": "{\"agent_name\": \"Agent1\", \"task_description\": \"Find the capital of France.\", \"expected_output\": \"The capital of France is Paris.\"}",
+                                        "name": "transfer_task_to_member"
+                                    },
+                                    "type": "function"
+                                },
+                                {
+                                    "id": "call_xzsaHV6u9ma25JBa7WwwnnPA",
+                                    "function": {
+                                        "arguments": "{\"agent_name\": \"Agent2\", \"task_description\": \"Find the capital of France.\", \"expected_output\": \"The capital of France is Paris.\"}",
+                                        "name": "transfer_task_to_member"
+                                    },
+                                    "type": "function"
+                                }
+                            ],
+                            "metrics": {
+                                "input_tokens": 429,
+                                "output_tokens": 92,
+                                "total_tokens": 521,
+                                "prompt_tokens": 429,
+                                "completion_tokens": 92,
+                                "prompt_tokens_details": {
+                                    "audio_tokens": 0,
+                                    "cached_tokens": 0
+                                },
+                                "completion_tokens_details": {
+                                    "accepted_prediction_tokens": 0,
+                                    "audio_tokens": 0,
+                                    "reasoning_tokens": 0,
+                                    "rejected_prediction_tokens": 0
+                                },
+                                "time": 1.6207927920040675
+                            },
+                            "created_at": 1743388250
+                        },
+                        {
+                            "content": "The capital of France is Paris.",
+                            "from_history": false,
+                            "stop_after_tool_call": false,
+                            "role": "tool",
+                            "tool_call_id": "call_YB1ZsiN4IGtasWKhfzWCBZds",
+                            "tool_name": "transfer_task_to_member",
+                            "tool_args": {
+                                "agent_name": "Agent1",
+                                "task_description": "Find the capital of France.",
+                                "expected_output": "The capital of France is Paris."
+                            },
+                            "tool_call_error": false,
+                            "metrics": {
+                                "time": 0.0006228330021258444
+                            },
+                            "created_at": 1743388252
+                        },
+                        {
+                            "content": "The capital of France is Paris. It is known for its iconic landmarks such as the Eiffel Tower, Louvre Museum, and Notre-Dame Cathedral.",
+                            "from_history": false,
+                            "stop_after_tool_call": false,
+                            "role": "tool",
+                            "tool_call_id": "call_xzsaHV6u9ma25JBa7WwwnnPA",
+                            "tool_name": "transfer_task_to_member",
+                            "tool_args": {
+                                "agent_name": "Agent2",
+                                "task_description": "Find the capital of France.",
+                                "expected_output": "The capital of France is Paris."
+                            },
+                            "tool_call_error": false,
+                            "metrics": {
+                                "time": 0.0003733330231625587
+                            },
+                            "created_at": 1743388253
+                        },
+                        {
+                            "content": "Both Agent1 and Agent2 have confirmed that the capital of France is Paris, known for its iconic landmarks such as the Eiffel Tower, Louvre Museum, and Notre-Dame Cathedral. Therefore, the task has been successfully completed.",
+                            "from_history": false,
+                            "stop_after_tool_call": false,
+                            "role": "assistant",
+                            "metrics": {
+                                "input_tokens": 571,
+                                "output_tokens": 50,
+                                "total_tokens": 621,
+                                "prompt_tokens": 571,
+                                "completion_tokens": 50,
+                                "prompt_tokens_details": {
+                                    "audio_tokens": 0,
+                                    "cached_tokens": 0
+                                },
+                                "completion_tokens_details": {
+                                    "accepted_prediction_tokens": 0,
+                                    "audio_tokens": 0,
+                                    "reasoning_tokens": 0,
+                                    "rejected_prediction_tokens": 0
+                                },
+                                "time": 1.03317804200924
+                            },
+                            "created_at": 1743388253
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "team_data": {
+        "name": "Test Team",
+        "team_id": "2a95e98a-676f-452e-aac3-b025ed860c9f",
+        "model": {
+            "id": "gpt-3.5-turbo-1106",
+            "name": "OpenAIChat",
+            "provider": "OpenAI",
+            "functions": {
+                "transfer_task_to_member": {
+                    "name": "transfer_task_to_member",
+                    "description": "Use this function to transfer a task to the nominated agent.\nYou must provide a clear and concise description of the task the agent should achieve AND the expected output.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "agent_name": {
+                                "type": "string",
+                                "description": "(str) The name of the agent to transfer the task to."
+                            },
+                            "task_description": {
+                                "type": "string",
+                                "description": "(str) A clear and concise description of the task the agent should achieve."
+                            },
+                            "expected_output": {
+                                "type": "string",
+                                "description": "(str) The expected output from the agent."
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                            "agent_name",
+                            "task_description",
+                            "expected_output"
+                        ]
+                    }
+                }
+            },
+            "response_format": "None",
+            "tools": [
+                {
+                    "type": "function",
+                    "function": {
+                        "name": "transfer_task_to_member",
+                        "description": "Use this function to transfer a task to the nominated agent.\nYou must provide a clear and concise description of the task the agent should achieve AND the expected output.",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "agent_name": {
+                                    "type": "string",
+                                    "description": "(str) The name of the agent to transfer the task to."
+                                },
+                                "task_description": {
+                                    "type": "string",
+                                    "description": "(str) A clear and concise description of the task the agent should achieve."
+                                },
+                                "expected_output": {
+                                    "type": "string",
+                                    "description": "(str) The expected output from the agent."
+                                }
+                            },
+                            "additionalProperties": false,
+                            "required": [
+                                "agent_name",
+                                "task_description",
+                                "expected_output"
+                            ]
+                        }
+                    }
+                }
+            ],
+            "tool_choice": "auto"
+        }
+    },
+    "session_data": {
+        "session_metrics": {
+            "input_tokens": 1000,
+            "output_tokens": 142,
+            "total_tokens": 1142,
+            "prompt_tokens": 1000,
+            "completion_tokens": 142,
+            "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 0
+            },
+            "completion_tokens_details": {
+                "accepted_prediction_tokens": 0,
+                "audio_tokens": 0,
+                "reasoning_tokens": 0,
+                "rejected_prediction_tokens": 0
+            },
+            "additional_metrics": null,
+            "time": 2.6539708340133075,
+            "time_to_first_token": null,
+            "timer": null
+        }
+    },
+    "extra_data": null,
+    "created_at": 1743388254,
+    "updated_at": 1743388254
+}

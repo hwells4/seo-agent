@@ -1,0 +1,187 @@
+{
+    "session_id": "50230680-7d4d-4b56-9e18-c507e28db084",
+    "user_id": null,
+    "team_session_id": "690bd86d-0ce6-4b61-8560-6315ae834d93",
+    "memory": {
+        "update_system_message_on_change": false,
+        "create_session_summary": false,
+        "update_session_summary_after_run": true,
+        "create_user_memories": false,
+        "update_user_memories_after_run": true,
+        "messages": [
+            {
+                "content": "<your_role>\nFirst test agent\n</your_role>\n\n<instructions>\n\nYou are Agent1, a helpful assistant.\nRespond to all queries with useful information.\nKeep your responses concise and clear.\n\n</instructions>",
+                "from_history": false,
+                "stop_after_tool_call": false,
+                "role": "system",
+                "created_at": 1743388252
+            },
+            {
+                "content": "You are a member of a team of agents. Your goal is to complete the following task:\n\nFind the capital of France.\n\n<expected_output>\nThe capital of France is Paris.\n</expected_output>",
+                "from_history": false,
+                "stop_after_tool_call": false,
+                "role": "user",
+                "created_at": 1743388252
+            },
+            {
+                "content": "The capital of France is Paris.",
+                "from_history": false,
+                "stop_after_tool_call": false,
+                "role": "assistant",
+                "metrics": {
+                    "input_tokens": 93,
+                    "output_tokens": 8,
+                    "total_tokens": 101,
+                    "prompt_tokens": 93,
+                    "completion_tokens": 8,
+                    "prompt_tokens_details": {
+                        "audio_tokens": 0,
+                        "cached_tokens": 0
+                    },
+                    "completion_tokens_details": {
+                        "accepted_prediction_tokens": 0,
+                        "audio_tokens": 0,
+                        "reasoning_tokens": 0,
+                        "rejected_prediction_tokens": 0
+                    },
+                    "time": 0.3849482089863159
+                },
+                "created_at": 1743388252
+            }
+        ],
+        "runs": [
+            {
+                "message": {
+                    "content": "You are a member of a team of agents. Your goal is to complete the following task:\n\nFind the capital of France.\n\n<expected_output>\nThe capital of France is Paris.\n</expected_output>",
+                    "from_history": false,
+                    "stop_after_tool_call": false,
+                    "role": "user",
+                    "created_at": 1743388252
+                },
+                "response": {
+                    "content": "The capital of France is Paris.",
+                    "content_type": "str",
+                    "event": "RunResponse",
+                    "metrics": {
+                        "input_tokens": [
+                            93
+                        ],
+                        "output_tokens": [
+                            8
+                        ],
+                        "total_tokens": [
+                            101
+                        ],
+                        "prompt_tokens": [
+                            93
+                        ],
+                        "completion_tokens": [
+                            8
+                        ],
+                        "prompt_tokens_details": [
+                            {
+                                "audio_tokens": 0,
+                                "cached_tokens": 0
+                            }
+                        ],
+                        "completion_tokens_details": [
+                            {
+                                "accepted_prediction_tokens": 0,
+                                "audio_tokens": 0,
+                                "reasoning_tokens": 0,
+                                "rejected_prediction_tokens": 0
+                            }
+                        ],
+                        "time": [
+                            0.3849482089863159
+                        ]
+                    },
+                    "model": "gpt-3.5-turbo-1106",
+                    "run_id": "99db32a0-e1cd-473d-8b09-43e01c05f393",
+                    "agent_id": "0c1b6358-6235-4e34-a9f3-1fb8921b040d",
+                    "session_id": "50230680-7d4d-4b56-9e18-c507e28db084",
+                    "tools": [],
+                    "created_at": 1743388250,
+                    "messages": [
+                        {
+                            "content": "<your_role>\nFirst test agent\n</your_role>\n\n<instructions>\n\nYou are Agent1, a helpful assistant.\nRespond to all queries with useful information.\nKeep your responses concise and clear.\n\n</instructions>",
+                            "from_history": false,
+                            "stop_after_tool_call": false,
+                            "role": "system",
+                            "created_at": 1743388252
+                        },
+                        {
+                            "content": "You are a member of a team of agents. Your goal is to complete the following task:\n\nFind the capital of France.\n\n<expected_output>\nThe capital of France is Paris.\n</expected_output>",
+                            "from_history": false,
+                            "stop_after_tool_call": false,
+                            "role": "user",
+                            "created_at": 1743388252
+                        },
+                        {
+                            "content": "The capital of France is Paris.",
+                            "from_history": false,
+                            "stop_after_tool_call": false,
+                            "role": "assistant",
+                            "metrics": {
+                                "input_tokens": 93,
+                                "output_tokens": 8,
+                                "total_tokens": 101,
+                                "prompt_tokens": 93,
+                                "completion_tokens": 8,
+                                "prompt_tokens_details": {
+                                    "audio_tokens": 0,
+                                    "cached_tokens": 0
+                                },
+                                "completion_tokens_details": {
+                                    "accepted_prediction_tokens": 0,
+                                    "audio_tokens": 0,
+                                    "reasoning_tokens": 0,
+                                    "rejected_prediction_tokens": 0
+                                },
+                                "time": 0.3849482089863159
+                            },
+                            "created_at": 1743388252
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "session_data": {
+        "session_metrics": {
+            "input_tokens": 93,
+            "output_tokens": 8,
+            "total_tokens": 101,
+            "prompt_tokens": 93,
+            "completion_tokens": 8,
+            "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 0
+            },
+            "completion_tokens_details": {
+                "accepted_prediction_tokens": 0,
+                "audio_tokens": 0,
+                "reasoning_tokens": 0,
+                "rejected_prediction_tokens": 0
+            },
+            "additional_metrics": null,
+            "time": 0.3849482089863159,
+            "time_to_first_token": null,
+            "timer": null
+        }
+    },
+    "extra_data": null,
+    "created_at": 1743388252,
+    "updated_at": 1743388252,
+    "agent_id": "0c1b6358-6235-4e34-a9f3-1fb8921b040d",
+    "agent_data": {
+        "name": "Agent1",
+        "agent_id": "0c1b6358-6235-4e34-a9f3-1fb8921b040d",
+        "model": {
+            "id": "gpt-3.5-turbo-1106",
+            "name": "OpenAIChat",
+            "provider": "OpenAI",
+            "response_format": "None"
+        }
+    }
+}
