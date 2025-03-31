@@ -7,19 +7,17 @@ WORKDIR /app
 # Install system dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    build-essential \
-    curl \
     netcat-traditional \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first to leverage Docker cache
+# Copy requirements first for better caching
 COPY requirements.txt .
 
 # Install Python dependencies
-RUN pip install --no-cache-dir "openai>=1.0.0,<2.0.0" && \
-    pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application
+# Copy application code
 COPY . .
 
 # Set environment variables
@@ -55,5 +53,8 @@ echo "Using port: $PORT"\n\
 python3 -m uvicorn api.base:app --host 0.0.0.0 --port $PORT --log-level debug' > /start.sh && \
     chmod +x /start.sh
 
-# Run the server
+# Set the PYTHONPATH
+ENV PYTHONPATH=/app
+
+# Run the startup script
 CMD ["/start.sh"]

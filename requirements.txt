@@ -6,8 +6,8 @@ pydantic==2.5.2
 python-dotenv==1.0.0
 
 # LLM providers
-openai>=1.0.0
-agno>=1.2.6
+openai==1.3.7
+agno==1.2.6
 anthropic==0.7.7
 
 # Content generation tools
