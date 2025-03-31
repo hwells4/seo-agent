@@ -497,14 +497,20 @@ def run_content_pipeline(topic, brand_voice=None, word_count=500, save_results=T
     # Save results to a file
     if save_results:
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"content_results_{timestamp}.json"
         
-        with open(filename, "w") as f:
+        # Create directories if they don't exist
+        os.makedirs("storage/content_results", exist_ok=True)
+        os.makedirs("storage/token_usage", exist_ok=True)
+        
+        # Save content results
+        results_filename = f"storage/content_results/content_{timestamp}.json"
+        with open(results_filename, "w") as f:
             json.dump(results, f, indent=2)
-        logger.info(f"Content results saved to {filename}")
+        logger.info(f"Content results saved to {results_filename}")
         
         # Save token usage report separately
-        token_tracker.save_report_to_file(f"token_usage_{timestamp}.json")
+        usage_filename = f"storage/token_usage/tokens_{timestamp}.json"
+        token_tracker.save_report_to_file(usage_filename)
     
     logger.info("Content creation pipeline completed")
     return results

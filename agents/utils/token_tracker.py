@@ -595,27 +595,33 @@ class TokenTracker:
         
         print("==============================")
     
-    def save_report_to_file(self, filename: Optional[str] = None):
+    def save_report_to_file(self, filename: Optional[str] = None) -> str:
         """
-        Save the usage report to a JSON file.
+        Save the usage report to a file.
         
         Args:
             filename: Optional custom filename, defaults to 'token_usage_{timestamp}.json'
+            
+        Returns:
+            The filename used
         """
+        import datetime
+        import os
+        import json
+        
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        
         if not filename:
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            filename = f"token_usage_{timestamp}.json"
+            # Create directory if it doesn't exist
+            os.makedirs("storage/token_usage", exist_ok=True)
+            filename = f"storage/token_usage/tokens_{timestamp}.json"
         
         report = self.get_usage_report()
-        
-        # Ensure directory exists
-        os.makedirs(os.path.dirname(os.path.abspath(filename)) if os.path.dirname(filename) else ".", exist_ok=True)
         
         with open(filename, "w") as f:
             json.dump(report, f, indent=2)
             
         logger.info(f"Token usage report saved to {filename}")
-        
         return filename
     
     def reset(self):

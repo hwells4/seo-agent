@@ -89,6 +89,10 @@ def test_api_endpoint():
                         
                         # Save the complete response data
                         timestamp = os.path.basename(__file__).replace('.py', '')
+                        
+                        # Ensure test_storage directory exists
+                        os.makedirs("test_storage", exist_ok=True)
+                        
                         api_result_file = f"test_storage/api_response_{timestamp}.json"
                         
                         with open(api_result_file, "w") as f:
@@ -108,13 +112,12 @@ def test_api_endpoint():
                                 with open(content_file, "w") as f:
                                     f.write(workflow_data["steps"]["content"]["output"])
                                 logger.info(f"Content output saved to {content_file}")
-                            
+                        
                             logger.info("Token tracking data is included in the response")
                             return True, workflow_data
                         else:
                             logger.error("Token tracking data is not included in the response")
                             return False, workflow_data
-                    
                     elif workflow_data["status"] == "failed":
                         logger.error(f"Workflow failed: {workflow_data.get('error', 'No error message')}")
                         return False, workflow_data
