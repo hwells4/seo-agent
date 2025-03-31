@@ -33,8 +33,7 @@ class BriefAgent(Agent):
             description="Creates content briefs based on research analysis.",
             model=OpenAIChat(id="gpt-4o"),
             storage=storage,
-            knowledge=get_knowledge_provider(),
-            use_json_mode=True
+            knowledge=get_knowledge_provider()
         )
     
     async def run(self, context: Dict[str, Any] = None) -> Dict[str, Any]:

@@ -68,8 +68,7 @@ class WorkflowService:
                 self.facts_agent,
                 self.content_agent
             ],
-            storage=self.storage,
-            mode="sequential"  # Use sequential mode instead of TeamOrchestration enum
+            storage=self.storage
         )
         
         logger.info(f"Workflow service initialized with Agno Team using {settings.agno.TEAM_ORCHESTRATION} orchestration")

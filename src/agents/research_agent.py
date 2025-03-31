@@ -224,7 +224,7 @@ class ResearchAgent(Agent):
             """
             
             # Just use this agent's run method with JSON mode
-            response = await self.run(
+            response = await super().run(
                 user_message=prompt,
                 use_json_mode=True
             )
@@ -391,7 +391,7 @@ class ResearchAgent(Agent):
         }
         
         # Use the agent's run method with JSON mode to get structured analysis
-        response = await self.run(
+        response = await super().run(
             context={
                 "keyword": keyword,
                 "sources": sources,

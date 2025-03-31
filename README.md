@@ -173,3 +173,153 @@ Once the application is running, you can access the API documentation at:
 ## Contributors
 
 - Your Name <your.email@example.com>
+
+# Content Creation Agent Team
+
+A multi-agent content creation system built with the Agno framework. This system uses a team of specialized agents to generate high-quality content through a multi-stage process.
+
+## Features
+
+- **Research Engine (O3Mini)**: Analyzes top content to understand structure, style, and topic coverage
+- **Brief Creator (DeepSeek)**: Creates content briefs based on research findings
+- **Facts Collector (Grok/xAI)**: Gathers supporting facts and figures for content
+- **Content Creator (Claude 3.7)**: Produces high-quality, human-sounding content with brand voice customization
+
+## Setup
+
+1. Clone the repository:
+```
+git clone <repository-url>
+cd seo-agent
+```
+
+2. Create a virtual environment and install dependencies:
+```
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+3. Create a `.env` file with your API keys:
+```
+OPENAI_API_KEY=your_openai_api_key
+ANTHROPIC_API_KEY=your_anthropic_api_key
+DEEPSEEK_API_KEY=your_deepseek_api_key
+XAI_API_KEY=your_xai_api_key
+```
+
+You can obtain these API keys from:
+- OpenAI: https://platform.openai.com/
+- Anthropic: https://console.anthropic.com/
+- DeepSeek: https://platform.deepseek.com/
+- xAI (Grok): https://www.grok.x/
+
+## Usage
+
+### Running as a standalone script
+
+To run the content creation team directly:
+
+```
+python content_creation_team.py
+```
+
+This will generate content for the default topic "desk organization tips" with a sample brand voice configuration.
+
+### Running as an API
+
+To run the API server:
+
+```
+python api.py
+```
+
+The API will be available at `http://localhost:8000`.
+
+#### API Endpoints
+
+1. **Create Content**
+   - URL: `POST /api/v1/content`
+   - Request Body:
+     ```json
+     {
+       "topic": "desk organization tips",
+       "content_type": "blog post",
+       "tone": "helpful",
+       "word_count": 500,
+       "brand_voice": {
+         "tone": "Friendly but professional",
+         "style": "Direct and practical",
+         "sentence_structure": "Mix of short and long sentences with active voice",
+         "language": "Accessible to general audience",
+         "taboo_words": ["obviously", "simply", "just", "clearly"],
+         "persuasion": "Focus on benefits rather than features",
+         "format": "Use headers and bullet points for scannability"
+       }
+     }
+     ```
+   - Response:
+     ```json
+     {
+       "workflow_id": "de006f9e-c21d-42ed-ad38-c2e0cd3f75b1",
+       "status": "pending",
+       "message": "Content creation started"
+     }
+     ```
+
+2. **Check Workflow Status**
+   - URL: `GET /api/v1/workflows/{workflow_id}`
+   - Response:
+     ```json
+     {
+       "workflow_id": "de006f9e-c21d-42ed-ad38-c2e0cd3f75b1",
+       "status": "completed",
+       "request": {
+         "topic": "desk organization tips",
+         "content_type": "blog post",
+         "tone": "helpful",
+         "word_count": 500,
+         "brand_voice": {
+           "tone": "Friendly but professional",
+           "style": "Direct and practical",
+           "sentence_structure": "Mix of short and long sentences with active voice",
+           "language": "Accessible to general audience",
+           "taboo_words": ["obviously", "simply", "just", "clearly"],
+           "persuasion": "Focus on benefits rather than features",
+           "format": "Use headers and bullet points for scannability"
+         }
+       },
+       "result": "Generated content...",
+       "error": null
+     }
+     ```
+
+## Brand Voice Customization
+
+The system supports detailed brand voice customization through the following parameters:
+
+- **tone**: The overall tone of voice (e.g., "Professional and authoritative", "Casual and friendly")
+- **style**: Writing style (e.g., "Clear, concise, and engaging", "Storytelling with examples")
+- **sentence_structure**: Guidelines for sentence construction (e.g., "Varied length with active voice")
+- **language**: Language usage guidance (e.g., "Industry terminology with clear explanations")
+- **taboo_words**: Words to avoid in content (e.g., ["obviously", "simply", "just", "clearly"])
+- **persuasion**: Persuasion techniques to employ (e.g., "Evidence-based arguments, social proof")
+- **format**: Content formatting guidance (e.g., "Clear headings, bullet points, short paragraphs")
+
+## Models Used
+
+- **Research Engine**: OpenAI GPT-3.5 Turbo 1106 (O3Mini)
+- **Brief Creator**: DeepSeek Reasoner
+- **Facts Collector**: xAI Grok
+- **Content Creator**: Anthropic Claude 3 Sonnet
+
+## Understanding the Code
+
+- `content_creation_team.py`: Creates and configures the team of agents
+- `api.py`: FastAPI implementation for exposing the content team as an API
+
+## Extending the System
+
+- Add new specialized agents for additional functions
+- Integrate different LLM providers or models
+- Add more sophisticated tools for research and data gathering
