@@ -78,7 +78,6 @@ This roadmap outlines the development plan for the SEO Agent multi-LLM content c
 
 ### Content Quality Improvements
 - 🔲 Implement structured output validation
-- 🔲 Add plagiarism detection
 - 🔲 Create factual accuracy verification
 - 🔲 Implement style consistency checks
 - 🔲 Add SEO optimization scoring

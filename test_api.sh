@@ -11,9 +11,9 @@ echo -e "${YELLOW}Testing Content Creation API${NC}"
 echo -e "${YELLOW}=========================${NC}"
 
 # Start the API server if it's not already running
-if ! pgrep -f "python api.py" > /dev/null; then
+if ! pgrep -f "python run_server.py" > /dev/null; then
     echo -e "${YELLOW}Starting API server...${NC}"
-    python api.py &
+    python run_server.py &
     API_PID=$!
     echo -e "${GREEN}API server started with PID: $API_PID${NC}"
     # Wait for server to start
@@ -76,8 +76,8 @@ FINAL_RESPONSE=$(curl -s -X GET http://localhost:8000/api/v1/workflows/$WORKFLOW
 echo $FINAL_RESPONSE | python -m json.tool
 
 # Save the result to a file
-echo $FINAL_RESPONSE | python -m json.tool > "api_test_result_$WORKFLOW_ID.json"
-echo -e "${GREEN}Results saved to api_test_result_$WORKFLOW_ID.json${NC}"
+echo $FINAL_RESPONSE | python -m json.tool > "content_storage/api_test_result_$WORKFLOW_ID.json"
+echo -e "${GREEN}Results saved to content_storage/api_test_result_$WORKFLOW_ID.json${NC}"
 
 # Clean up
 if [ ! -z "$API_PID" ]; then
