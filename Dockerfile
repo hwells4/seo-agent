@@ -34,12 +34,12 @@ COPY . .
 ENV PYTHONPATH=/app \
     PORT=8000
 
-# Expose the port (Railway will override this with their own port)
-EXPOSE ${PORT}
+# Create a startup script
+RUN echo '#!/bin/sh\n\
+PORT="${PORT:-8000}"\n\
+echo "Starting server on port $PORT..."\n\
+exec uvicorn api.base:app --host 0.0.0.0 --port "$PORT"' > /start.sh && \
+    chmod +x /start.sh
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:${PORT}/api/v1/health || exit 1
-
-# Start the application
-CMD uvicorn api.base:app --host 0.0.0.0 --port ${PORT}
+# Start the application using the startup script
+CMD ["/start.sh"]
