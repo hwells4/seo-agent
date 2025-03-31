@@ -45,15 +45,22 @@ async def startup_event():
 
 # Root endpoint
 @app.get("/")
-async def root():
-    """Root endpoint"""
+def read_root():
+    """Root endpoint that provides basic API information"""
     return {
+        "status": "online",
         "message": "Welcome to the SEO Agent API",
-        "docs": "/docs",
         "endpoints": [
             "/api/v1/content",
             "/api/v1/content/workflows/{workflow_id}"
         ]
+    }
+
+@app.get("/api/v1/health")
+def health_check():
+    """Health check endpoint for monitoring"""
+    return {
+        "status": "ok"
     }
 
 # Run the API with uvicorn

@@ -11,7 +11,13 @@ restartPolicyMaxRetries = 5
 # Deploy the web service
 [services.web]
 name = "seo-agent-api"
-envVars = []
+envVars = [
+  { key = "OPENAI_API_KEY", value = "${{OPENAI_API_KEY}}" },
+  { key = "ANTHROPIC_API_KEY", value = "${{ANTHROPIC_API_KEY}}" },
+  { key = "DEEPSEEK_API_KEY", value = "${{DEEPSEEK_API_KEY}}" },
+  { key = "XAI_API_KEY", value = "${{XAI_API_KEY}}" },
+  { key = "OPENROUTER_API_KEY", value = "${{OPENROUTER_API_KEY}}" }
+]
 
 # Database settings
 [services.db]

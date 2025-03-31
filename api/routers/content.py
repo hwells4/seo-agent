@@ -46,6 +46,7 @@ class WorkflowStatusResponse(BaseModel):
     result: Optional[str] = None
     error: Optional[str] = None
     steps: Optional[Dict[str, Dict[str, Any]]] = None
+    token_usage: Optional[Dict[str, Any]] = None
 
 def run_content_workflow(workflow_id: str, request: ContentRequest):
     """Run the content creation pipeline in the background"""
@@ -75,6 +76,10 @@ def run_content_workflow(workflow_id: str, request: ContentRequest):
         # Update workflow with results
         workflows[workflow_id]["status"] = "completed"
         workflows[workflow_id]["result"] = results["steps"]["content"]["output"]
+        
+        # Include token usage in the response if available
+        if "token_usage" in results:
+            workflows[workflow_id]["token_usage"] = results["token_usage"]
         
         # Update step statuses
         workflows[workflow_id]["steps"]["research"] = {
@@ -149,5 +154,6 @@ async def get_workflow_status(workflow_id: str):
         request=workflow["request"] if "request" in workflow else None,
         result=workflow.get("result"),
         error=workflow.get("error"),
-        steps=workflow.get("steps")
+        steps=workflow.get("steps"),
+        token_usage=workflow.get("token_usage")
     ) 

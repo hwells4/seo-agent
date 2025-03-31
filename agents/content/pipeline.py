@@ -273,7 +273,7 @@ def create_content_team(brand_voice=None):
     content_agent = Agent(
         name="Content Creator",
         role="Create high-quality, human-sounding content",
-        model=Claude(id="claude-3-sonnet-20240229", api_key=anthropic_api_key),  # Added explicit API key
+        model=Claude(id="claude-3-sonnet-20240229", api_key=anthropic_api_key),  # Using Claude 3 Sonnet that we know works
         storage=storage,
         instructions=content_instructions,
     )

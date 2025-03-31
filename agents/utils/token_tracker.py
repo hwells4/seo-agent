@@ -24,9 +24,11 @@ class TokenTracker:
         },
         "anthropic": {
             "claude-3-sonnet": (0.003, 0.015),    # $0.003 per 1K input, $0.015 per 1K output
+            "claude-3-sonnet-20240229": (0.003, 0.015),  # $0.003 per 1K input, $0.015 per 1K output
             "claude-3-opus": (0.015, 0.075),      # $0.015 per 1K input, $0.075 per 1K output
             "claude-3-haiku": (0.00025, 0.00125), # $0.00025 per 1K input, $0.00125 per 1K output
-            "claude-3.5-sonnet": (0.003, 0.015)   # $0.003 per 1K input, $0.015 per 1K output
+            "claude-3.5-sonnet": (0.003, 0.015),  # $0.003 per 1K input, $0.015 per 1K output
+            "claude-3.7-sonnet": (0.003, 0.015)   # $0.003 per 1K input, $0.015 per 1K output (Claude 3.7 pricing)
         },
         "deepseek": {
             "deepseek-chat": (0.00027, 0.0011),   # $0.27 per 1M input, $1.10 per 1M output (converted to per 1K)
