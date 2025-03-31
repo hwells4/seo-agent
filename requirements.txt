@@ -6,7 +6,7 @@ pydantic==2.5.2
 python-dotenv==1.0.0
 
 # LLM providers
-# agno and openai are installed together in buildCommand
+# agno and openai are installed separately in buildCommand
 anthropic==0.7.7
 
 # Content generation tools

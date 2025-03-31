@@ -1,38 +1,20 @@
 services:
   - type: web
-    name: seo-agent-api
+    name: seo-agent
     env: python
     buildCommand: |
-      echo "Python version:" && python --version
-      echo "Setting up environment..."
-      export PYTHONPATH=/app
-      echo "PYTHONPATH set to: $PYTHONPATH"
-      echo "Installing packages..."
-      # Install agno and openai together as per docs
-      pip install --no-cache-dir -U agno openai==0.28.1
-      pip install --no-cache-dir -r requirements.txt
-      echo "Installed packages:" && pip list
-      echo "Verifying OpenAI installation:"
+      python -m pip install --upgrade pip
+      pip install --no-cache-dir openai==0.28.1 agno==1.2.6
+      pip install -r requirements.txt
       python -c "import openai; print(f'OpenAI version: {openai.__version__}')"
-      echo "Verifying Agno installation:"
       python -c "from agno.models.openai import OpenAIChat; print('Agno OpenAI import successful')"
-    startCommand: |
-      echo "Starting FastAPI application..."
-      echo "Current directory:" && pwd
-      echo "Python path:" && echo $PYTHONPATH
-      python -m uvicorn api.base:app --host 0.0.0.0 --port $PORT --log-level debug
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.11.0
-      - key: PYTHONPATH
-        value: /app
       - key: OPENAI_API_KEY
         sync: false
       - key: ANTHROPIC_API_KEY
         sync: false
-      - key: DEEPSEEK_API_KEY
-        sync: false
-      - key: XAI_API_KEY
+      - key: AGNO_API_KEY
         sync: false
     healthCheckPath: /api/v1/health
     autoDeploy: true 
