@@ -3,16 +3,21 @@ services:
     name: seo-agent-api
     env: python
     buildCommand: |
-      python -m venv .venv
-      . .venv/bin/activate
-      pip install --upgrade pip
-      pip install -r requirements.txt
+      echo "Python version:" && python --version
+      echo "Installing packages..."
+      pip install --no-cache-dir openai==0.28.1
+      pip install --no-cache-dir -r requirements.txt
+      echo "Installed packages:" && pip list
     startCommand: |
-      . .venv/bin/activate
-      python -m uvicorn api.base:app --host 0.0.0.0 --port $PORT
+      echo "Starting FastAPI application..."
+      echo "Current directory:" && pwd
+      echo "Python path:" && echo $PYTHONPATH
+      python -m uvicorn api.base:app --host 0.0.0.0 --port $PORT --log-level debug
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
+      - key: PYTHONPATH
+        value: /app
       - key: OPENAI_API_KEY
         sync: false
       - key: ANTHROPIC_API_KEY
