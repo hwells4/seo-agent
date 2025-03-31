@@ -7,63 +7,39 @@ WORKDIR /app
 # Install system dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    netcat-traditional \
+    build-essential \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first for better caching
+# Copy requirements first to leverage Docker cache
 COPY requirements.txt .
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Install Python packages in the correct order
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir "anthropic>=0.7.7" && \
+    pip install --no-cache-dir "openai>=1.0.0" && \
+    pip install --no-cache-dir "agno==1.2.6" && \
+    pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
+# Verify installations
+RUN python -c "import openai; print(f'OpenAI version: {openai.__version__}')" && \
+    python -c "from agno.models.openai import OpenAIChat; print('Agno OpenAI import successful')" && \
+    python -c "import anthropic; print(f'Anthropic version: {anthropic.__version__}')" && \
+    python -c "from agno.models.anthropic import Claude; print('Agno Anthropic import successful')"
+
+# Copy the rest of the application
 COPY . .
 
 # Set environment variables
-ENV PYTHONUNBUFFERED=1
-ENV HOST=0.0.0.0
-ENV PORT=8000
-ENV LOG_LEVEL=debug
+ENV PYTHONPATH=/app \
+    PORT=8000
 
-# Create a health check script
-RUN echo '#!/bin/sh\n\
-sleep 10\n\
-PORT="${PORT:-8000}"\n\
-for i in 1 2 3; do\n\
-    echo "Health check attempt $i..."\n\
-    if nc -z localhost $PORT && curl -f http://localhost:$PORT/api/v1/health; then\n\
-        echo "Health check passed!"\n\
-        exit 0\n\
-    fi\n\
-    sleep 5\n\
-done\n\
-echo "Health check failed after 3 attempts"\n\
-exit 1' > /healthcheck.sh && \
-    chmod +x /healthcheck.sh
+# Expose the port (Railway will override this with their own port)
+EXPOSE ${PORT}
 
-# Expose the port
-EXPOSE 8000
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:${PORT}/api/v1/health || exit 1
 
-# Health check using netcat and curl
-HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 CMD /healthcheck.sh
-
-# Create startup script with environment variable check
-RUN echo '#!/bin/sh\n\
-echo "Starting server..."\n\
-echo "Checking environment variables..."\n\
-if [ -z "$OPENAI_API_KEY" ]; then echo "Warning: OPENAI_API_KEY not set"; fi\n\
-if [ -z "$ANTHROPIC_API_KEY" ]; then echo "Warning: ANTHROPIC_API_KEY not set"; fi\n\
-if [ -z "$DEEPSEEK_API_KEY" ]; then echo "Warning: DEEPSEEK_API_KEY not set"; fi\n\
-if [ -z "$XAI_API_KEY" ]; then echo "Warning: XAI_API_KEY not set"; fi\n\
-PORT="${PORT:-8000}"\n\
-echo "Using port: $PORT"\n\
-echo "Starting FastAPI application..."\n\
-exec python3 -m uvicorn api.base:app --host 0.0.0.0 --port $PORT --log-level debug' > /start.sh && \
-    chmod +x /start.sh
-
-# Set the PYTHONPATH
-ENV PYTHONPATH=/app
-
-# Run the startup script
-CMD ["/start.sh"]
+# Start the application
+CMD uvicorn api.base:app --host 0.0.0.0 --port ${PORT}
