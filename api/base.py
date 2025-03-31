@@ -5,13 +5,17 @@ various agent pipelines through a unified RESTful interface.
 """
 
 import os
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
 import logging
 import datetime
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
 
 from api.routers import content
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 # Load environment variables
 load_dotenv()
@@ -35,11 +39,6 @@ app.add_middleware(
 # Include routers
 app.include_router(content.router)
 
-# Configure logging
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
-
-# Set API keys on startup
 @app.on_event("startup")
 async def startup_event():
     """Initialize on startup"""
@@ -54,7 +53,6 @@ async def startup_event():
     }
     logger.info(f"API Keys configured: {api_keys}")
 
-# Root endpoint
 @app.get("/")
 def read_root():
     """Root endpoint that provides basic API information"""
@@ -62,6 +60,7 @@ def read_root():
         "status": "online",
         "message": "Welcome to the SEO Agent API",
         "endpoints": [
+            "/api/v1/health",
             "/api/v1/content",
             "/api/v1/content/workflows/{workflow_id}"
         ]

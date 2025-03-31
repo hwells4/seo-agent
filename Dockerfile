@@ -28,17 +28,25 @@ ENV LOG_LEVEL=debug
 
 # Create a health check script
 RUN echo '#!/bin/sh\n\
+sleep 10\n\
 PORT="${PORT:-8000}"\n\
-nc -zv localhost $PORT || exit 1\n\
-curl -f http://localhost:$PORT/api/v1/health || exit 1' > /healthcheck.sh && \
+for i in 1 2 3; do\n\
+    echo "Health check attempt $i..."\n\
+    if nc -z localhost $PORT && curl -f http://localhost:$PORT/api/v1/health; then\n\
+        echo "Health check passed!"\n\
+        exit 0\n\
+    fi\n\
+    sleep 5\n\
+done\n\
+echo "Health check failed after 3 attempts"\n\
+exit 1' > /healthcheck.sh && \
     chmod +x /healthcheck.sh
 
 # Expose the port
 EXPOSE 8000
 
 # Health check using netcat and curl
-HEALTHCHECK --interval=5s --timeout=3s --start-period=5s --retries=3 \
-    CMD /healthcheck.sh
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 CMD /healthcheck.sh
 
 # Create startup script with environment variable check
 RUN echo '#!/bin/sh\n\
@@ -50,7 +58,8 @@ if [ -z "$DEEPSEEK_API_KEY" ]; then echo "Warning: DEEPSEEK_API_KEY not set"; fi
 if [ -z "$XAI_API_KEY" ]; then echo "Warning: XAI_API_KEY not set"; fi\n\
 PORT="${PORT:-8000}"\n\
 echo "Using port: $PORT"\n\
-python3 -m uvicorn api.base:app --host 0.0.0.0 --port $PORT --log-level debug' > /start.sh && \
+echo "Starting FastAPI application..."\n\
+exec python3 -m uvicorn api.base:app --host 0.0.0.0 --port $PORT --log-level debug' > /start.sh && \
     chmod +x /start.sh
 
 # Set the PYTHONPATH
