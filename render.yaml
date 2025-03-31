@@ -5,9 +5,14 @@ services:
     buildCommand: |
       echo "Python version:" && python --version
       echo "Installing packages..."
-      pip install --no-cache-dir openai==0.28.1
+      # Install agno and openai together as per docs
+      pip install --no-cache-dir -U agno openai==0.28.1
       pip install --no-cache-dir -r requirements.txt
       echo "Installed packages:" && pip list
+      echo "Verifying OpenAI installation:"
+      python -c "import openai; print(f'OpenAI version: {openai.__version__}')"
+      echo "Verifying Agno installation:"
+      python -c "from agno.models.openai import OpenAIChat; print('Agno OpenAI import successful')"
     startCommand: |
       echo "Starting FastAPI application..."
       echo "Current directory:" && pwd
