@@ -8,6 +8,8 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
+import logging
+import datetime
 
 from api.routers import content
 
@@ -33,15 +35,24 @@ app.add_middleware(
 # Include routers
 app.include_router(content.router)
 
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
 # Set API keys on startup
 @app.on_event("startup")
 async def startup_event():
     """Initialize on startup"""
-    # Set API keys from environment
-    os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY", "")
-    os.environ["ANTHROPIC_API_KEY"] = os.getenv("ANTHROPIC_API_KEY", "")
-    os.environ["DEEPSEEK_API_KEY"] = os.getenv("DEEPSEEK_API_KEY", "")
-    os.environ["XAI_API_KEY"] = os.getenv("XAI_API_KEY", "")
+    logger.info("Starting SEO Agent API...")
+    
+    # Log environment status (without exposing values)
+    api_keys = {
+        "OPENAI_API_KEY": bool(os.getenv("OPENAI_API_KEY")),
+        "ANTHROPIC_API_KEY": bool(os.getenv("ANTHROPIC_API_KEY")),
+        "DEEPSEEK_API_KEY": bool(os.getenv("DEEPSEEK_API_KEY")),
+        "XAI_API_KEY": bool(os.getenv("XAI_API_KEY"))
+    }
+    logger.info(f"API Keys configured: {api_keys}")
 
 # Root endpoint
 @app.get("/")
@@ -59,7 +70,25 @@ def read_root():
 @app.get("/api/v1/health")
 async def health_check():
     """Health check endpoint for monitoring"""
-    return {"status": "ok"}
+    try:
+        return {
+            "status": "ok",
+            "timestamp": datetime.datetime.now().isoformat(),
+            "api_version": "1.0.0",
+            "environment": {
+                "OPENAI_API_KEY": "configured" if os.getenv("OPENAI_API_KEY") else "missing",
+                "ANTHROPIC_API_KEY": "configured" if os.getenv("ANTHROPIC_API_KEY") else "missing",
+                "DEEPSEEK_API_KEY": "configured" if os.getenv("DEEPSEEK_API_KEY") else "missing",
+                "XAI_API_KEY": "configured" if os.getenv("XAI_API_KEY") else "missing"
+            }
+        }
+    except Exception as e:
+        logger.error(f"Health check failed: {str(e)}")
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": datetime.datetime.now().isoformat()
+        }
 
 # Run the API with uvicorn
 if __name__ == "__main__":

@@ -30,8 +30,9 @@ ENV LOG_LEVEL=debug
 
 # Create a health check script
 RUN echo '#!/bin/sh\n\
-nc -zv localhost 8000 || exit 1\n\
-curl -f http://localhost:8000/api/v1/health || exit 1' > /healthcheck.sh && \
+PORT="${PORT:-8000}"\n\
+nc -zv localhost $PORT || exit 1\n\
+curl -f http://localhost:$PORT/api/v1/health || exit 1' > /healthcheck.sh && \
     chmod +x /healthcheck.sh
 
 # Expose the port
@@ -43,13 +44,15 @@ HEALTHCHECK --interval=5s --timeout=3s --start-period=5s --retries=3 \
 
 # Create startup script with environment variable check
 RUN echo '#!/bin/sh\n\
-echo "Starting server on port 8000..."\n\
+echo "Starting server..."\n\
 echo "Checking environment variables..."\n\
 if [ -z "$OPENAI_API_KEY" ]; then echo "Warning: OPENAI_API_KEY not set"; fi\n\
 if [ -z "$ANTHROPIC_API_KEY" ]; then echo "Warning: ANTHROPIC_API_KEY not set"; fi\n\
 if [ -z "$DEEPSEEK_API_KEY" ]; then echo "Warning: DEEPSEEK_API_KEY not set"; fi\n\
 if [ -z "$XAI_API_KEY" ]; then echo "Warning: XAI_API_KEY not set"; fi\n\
-python3 -m uvicorn minimal_server:app --host 0.0.0.0 --port 8000 --log-level debug' > /start.sh && \
+PORT="${PORT:-8000}"\n\
+echo "Using port: $PORT"\n\
+python3 -m uvicorn api.base:app --host 0.0.0.0 --port $PORT --log-level debug' > /start.sh && \
     chmod +x /start.sh
 
 # Run the server

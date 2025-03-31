@@ -2,6 +2,8 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
+import os
+import datetime
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
@@ -36,7 +38,20 @@ async def startup_event():
 async def health_check():
     """Health check endpoint for monitoring"""
     logger.info("Health check endpoint called")
-    return {"status": "ok"}
+    try:
+        # Log environment info
+        port = os.getenv('PORT', '8000')
+        logger.info(f"Server running on port {port}")
+        logger.info(f"Environment variables set: {[k for k in os.environ.keys() if not k.startswith('_')]}")
+        
+        return {
+            "status": "ok",
+            "port": port,
+            "timestamp": datetime.datetime.now().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Health check failed: {str(e)}")
+        raise
 
 if __name__ == "__main__":
     import uvicorn
